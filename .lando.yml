@@ -1,0 +1,6 @@
+name: planedo
+recipe: symfony
+config:
+  webroot: public
+  php: '8.0'
+  database: postgres:13
