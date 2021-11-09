@@ -8,31 +8,34 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: FeedEntryRepository::class)]
 class FeedEntry
 {
+//    #[ORM\Id]
+//    #[ORM\GeneratedValue]
+//    #[ORM\Column(type: 'integer')]
+//    private int $id;
+
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    private int $id;
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $link;
+
+//    #[ORM\Id]
+    #[ORM\ManyToOne(targetEntity: Feed::class, inversedBy: 'entries')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $feed;
 
     #[ORM\Column(type: 'string', length: 255)]
     private string $title;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private string $link;
+    private string $authorName;
 
     #[ORM\Column(type: 'text')]
     private string $summary;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private string $authorName;
 
-    #[ORM\ManyToOne(targetEntity: Feed::class, inversedBy: 'entries')]
-    #[ORM\JoinColumn(nullable: false)]
-    private $feed;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+//    public function getId(): ?int
+//    {
+//        return $this->id;
+//    }
 
     public function getTitle(): ?string
     {
