@@ -100,6 +100,15 @@
     "laminas/laminas-code": {
         "version": "4.4.3"
     },
+    "laminas/laminas-escaper": {
+        "version": "2.9.0"
+    },
+    "laminas/laminas-feed": {
+        "version": "2.15.0"
+    },
+    "laminas/laminas-stdlib": {
+        "version": "3.6.0"
+    },
     "monolog/monolog": {
         "version": "2.3.5"
     },
