@@ -9,6 +9,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\BatchActionDto;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 class FeedCrudController extends AbstractCrudController
@@ -38,10 +40,30 @@ class FeedCrudController extends AbstractCrudController
         $actions->add(Crud::PAGE_EDIT, $updateFeed);
         $actions->add(Action::INDEX, $updateFeed);
 
+        $updateFeeds = Action::new('updateFeeds', 'Update')
+            ->linkToCrudAction('batchUpdateFeeds')
+            ->addCssClass('btn btn-primary')
+            ->setIcon('fa fa-user-check')
+        ;
+
+        $actions->addBatchAction($updateFeeds);
+
         return $actions;
     }
 
-    public function updateFeed(AdminContext $context, MessageBusInterface $bus)
+    public function batchUpdateFeeds(BatchActionDto $context, MessageBusInterface $bus): Response
+    {
+        $ids = $context->getEntityIds();
+        foreach ($ids as $id) {
+            $bus->dispatch(new UpdateFeed($id));
+        }
+
+        $this->addFlash('notice', sprintf('Update queued for %d feeds.', count($ids)));
+
+        return $this->redirect($context->getReferrerUrl());
+    }
+
+    public function updateFeed(AdminContext $context, MessageBusInterface $bus): Response
     {
         /** @var Feed $feed */
         $feed = $context->getEntity()->getInstance();
