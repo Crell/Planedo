@@ -32,13 +32,15 @@ class FeedEntry
     private string $summary;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    private $modified;
+    private \DateTimeImmutable $modified;
 
+    #[ORM\Column(type: 'boolean')]
+    private bool $rejected = false;
 
-//    public function getId(): ?int
-//    {
-//        return $this->id;
-//    }
+    public function getId(): string
+    {
+        return $this->getLink();
+    }
 
     public function getTitle(): ?string
     {
@@ -108,6 +110,18 @@ class FeedEntry
     public function setModified(\DateTimeImmutable $modified): self
     {
         $this->modified = $modified;
+
+        return $this;
+    }
+
+    public function getRejected(): bool
+    {
+        return $this->rejected;
+    }
+
+    public function setRejected(bool $rejected): self
+    {
+        $this->rejected = $rejected;
 
         return $this;
     }

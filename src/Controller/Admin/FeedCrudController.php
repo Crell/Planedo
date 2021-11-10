@@ -29,7 +29,7 @@ class FeedCrudController extends AbstractCrudController
             IdField::new('id')->onlyWhenUpdating()->setDisabled(),
             TextField::new('title'),
             TextField::new('link'),
-            DateTimeField::new('lastUpdated')->setDisabled(),
+            DateTimeField::new('lastUpdated')->hideWhenCreating()->setDisabled(),
         ];
     }
 
@@ -37,7 +37,7 @@ class FeedCrudController extends AbstractCrudController
     {
         $updateFeed = Action::new('updateFeed', 'Update')
             ->displayAsLink()
-            ->linkToCrudAction('updateFeed');;
+            ->linkToCrudAction('updateFeed');
 
         $actions->add(Crud::PAGE_EDIT, $updateFeed);
         $actions->add(Action::INDEX, $updateFeed);

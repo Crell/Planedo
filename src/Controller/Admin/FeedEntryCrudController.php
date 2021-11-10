@@ -4,13 +4,18 @@ namespace App\Controller\Admin;
 
 use App\Entity\Feed;
 use App\Entity\FeedEntry;
+use App\Message\RejectEntry;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\BatchActionDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class FeedEntryCrudController extends AbstractCrudController
 {
@@ -25,6 +30,7 @@ class FeedEntryCrudController extends AbstractCrudController
             ->setEntityLabelInSingular('Feed entry')
             ->setEntityLabelInPlural('Feed entries')
             ->setPaginatorPageSize(50)
+            ->setDefaultSort(['modified' => 'DESC'])
         ;
     }
 
@@ -43,17 +49,53 @@ class FeedEntryCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
+        $rejectEntry = Action::new('rejectEntry', 'Reject')
+            ->displayAsLink()
+            ->linkToCrudAction('rejectEntry')
+            ->displayIf(static fn (FeedEntry $entry) => !$entry->getRejected());
+
         $actions
             ->disable(Action::NEW)
             ->disable(Action::EDIT)
             ->disable(Action::DELETE)
             ->disable(Action::BATCH_DELETE)
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
+            ->add(Crud::PAGE_INDEX, $rejectEntry)
         ;
+
+        $rejectEntries = Action::new('rejectEntries', 'Reject')
+            ->linkToCrudAction('batchRejectEntries')
+            ->addCssClass('btn btn-primary')
+            ->setIcon('fa fa-user-check')
+        ;
+
+        $actions->addBatchAction($rejectEntries);
 
         return $actions;
     }
 
+    public function batchRejectEntries(BatchActionDto $context, MessageBusInterface $bus): Response
+    {
+        $ids = $context->getEntityIds();
+        foreach ($ids as $id) {
+            $bus->dispatch(new RejectEntry($id));
+        }
 
+        $this->addFlash('notice', sprintf('%d entries rejected.', count($ids)));
+
+        return $this->redirect($context->getReferrerUrl());
+    }
+
+    public function rejectEntry(AdminContext $context, MessageBusInterface $bus): Response
+    {
+        /** @var Feed $entry */
+        $entry = $context->getEntity()->getInstance();
+
+        $bus->dispatch(new RejectEntry($entry->getId()));
+
+        $this->addFlash('notice', sprintf('Rejected entry: %s', $entry->getTitle()));
+
+        return $this->redirect($context->getReferrer());
+    }
 
 }
