@@ -64,10 +64,10 @@ final class UpdateFeedHandler implements MessageHandlerInterface
                     ->setFeed($feed)
                     ->setTitle($item->getTitle())
                     ->setLink($item->getLink())
-                    ->setSummary($item->getDescription())
+                    ->setSummary($item->getDescription() ?? '')
                     ->setModified($item->getDateModified() ? \DateTimeImmutable::createFromInterface($item->getDateModified()) : new \DateTimeImmutable())
                     // @todo Pretty sure this needs to be redesigned.
-                    ->setAuthorName($item->getAuthor(0)['name'])
+                    ->setAuthorName('' /* $item->getAuthor(0)['name'] */)
                 ;
                 $em->persist($entry);
                 $feed->addEntry($entry);
