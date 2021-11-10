@@ -31,6 +31,9 @@ class FeedEntry
     #[ORM\Column(type: 'text')]
     private string $summary;
 
+    #[ORM\Column(type: 'datetime_immutable')]
+    private $modified;
+
 
 //    public function getId(): ?int
 //    {
@@ -93,6 +96,18 @@ class FeedEntry
     public function setFeed(?Feed $feed): self
     {
         $this->feed = $feed;
+
+        return $this;
+    }
+
+    public function getModified(): ?\DateTimeImmutable
+    {
+        return $this->modified;
+    }
+
+    public function setModified(\DateTimeImmutable $modified): self
+    {
+        $this->modified = $modified;
 
         return $this;
     }

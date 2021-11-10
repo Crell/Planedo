@@ -10,6 +10,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\BatchActionDto;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -20,16 +23,15 @@ class FeedCrudController extends AbstractCrudController
         return Feed::class;
     }
 
-    /*
     public function configureFields(string $pageName): iterable
     {
         return [
-            IdField::new('id'),
+            IdField::new('id')->onlyWhenUpdating()->setDisabled(),
             TextField::new('title'),
-            TextEditorField::new('description'),
+            TextField::new('link'),
+            DateTimeField::new('lastUpdated')->setDisabled(),
         ];
     }
-    */
 
     public function configureActions(Actions $actions): Actions
     {

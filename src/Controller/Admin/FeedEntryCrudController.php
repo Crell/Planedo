@@ -9,6 +9,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class FeedEntryCrudController extends AbstractCrudController
@@ -32,6 +33,7 @@ class FeedEntryCrudController extends AbstractCrudController
         return [
             TextField::new('title')->setDisabled(),
             TextField::new('link')->setDisabled(),
+            DateTimeField::new('modified', 'Date')->setDisabled(),
             // @todo This contains HTML, so figure out how to format nicely.
             TextField::new('summary')->setDisabled()->onlyOnDetail(),
             TextField::new('feed.title', 'Feed')->setDisabled()->onlyOnIndex(),

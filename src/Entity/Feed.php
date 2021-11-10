@@ -24,6 +24,9 @@ class Feed
     #[ORM\OneToMany(mappedBy: 'feed', targetEntity: FeedEntry::class, orphanRemoval: true)]
     private $entries;
 
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private $lastUpdated;
+
     public function __construct()
     {
         $this->entries = new ArrayCollection();
@@ -84,6 +87,18 @@ class Feed
                 $entry->setFeed(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLastUpdated(): ?\DateTimeImmutable
+    {
+        return $this->lastUpdated;
+    }
+
+    public function setLastUpdated(\DateTimeImmutable $lastUpdated): self
+    {
+        $this->lastUpdated = $lastUpdated;
 
         return $this;
     }

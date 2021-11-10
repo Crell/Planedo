@@ -65,12 +65,16 @@ final class UpdateFeedHandler implements MessageHandlerInterface
                     ->setTitle($item->getTitle())
                     ->setLink($item->getLink())
                     ->setSummary($item->getDescription())
+                    ->setModified($item->getDateModified() ? \DateTimeImmutable::createFromInterface($item->getDateModified()) : new \DateTimeImmutable())
                     // @todo Pretty sure this needs to be redesigned.
                     ->setAuthorName($item->getAuthor(0)['name'])
                 ;
                 $em->persist($entry);
                 $feed->addEntry($entry);
             }
+
+            // Mark that it has been updated.
+            $feed->setLastUpdated(new \DateTimeImmutable(timezone: new \DateTimeZone('UTC')));
 
             $em->persist($feed);
             $em->flush();
