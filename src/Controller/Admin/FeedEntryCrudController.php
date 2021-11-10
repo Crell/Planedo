@@ -2,11 +2,13 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\Feed;
 use App\Entity\FeedEntry;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class FeedEntryCrudController extends AbstractCrudController
@@ -21,6 +23,7 @@ class FeedEntryCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('Feed entry')
             ->setEntityLabelInPlural('Feed entries')
+            ->setPaginatorPageSize(50)
         ;
     }
 
@@ -29,14 +32,21 @@ class FeedEntryCrudController extends AbstractCrudController
         return [
             TextField::new('link')->setDisabled(),
             TextField::new('title')->setDisabled(),
-            // @todo Display the name of the Feed, if we can?
+            // @todo This contains HTML, so figure out how to format nicely.
+            TextField::new('summary')->setDisabled()->onlyOnDetail(),
+            AssociationField::new('feed')->setDisabled()->onlyOnIndex(),
         ];
     }
 
-
     public function configureActions(Actions $actions): Actions
     {
-        $actions->disable(Action::NEW);
+        $actions
+            ->disable(Action::NEW)
+            ->disable(Action::EDIT)
+            ->disable(Action::DELETE)
+            ->disable(Action::BATCH_DELETE)
+            ->add(Crud::PAGE_INDEX, Action::DETAIL)
+        ;
 
         return $actions;
     }
