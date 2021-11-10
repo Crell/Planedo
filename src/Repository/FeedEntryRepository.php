@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\FeedEntry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -14,9 +15,22 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class FeedEntryRepository extends ServiceEntityRepository
 {
+    public const ItemsPerPage = 5;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, FeedEntry::class);
+    }
+
+    public function latestEntriesPaginator(int $offset): Paginator
+    {
+        $query = $this->createQueryBuilder('f')
+            ->orderBy('f.modified', 'DESC')
+            ->setMaxResults(static::ItemsPerPage)
+            ->setFirstResult($offset)
+            ->getQuery();
+
+        return new Paginator($query);
     }
 
     // /**
