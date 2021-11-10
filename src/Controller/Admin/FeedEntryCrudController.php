@@ -30,11 +30,12 @@ class FeedEntryCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            TextField::new('link')->setDisabled(),
             TextField::new('title')->setDisabled(),
+            TextField::new('link')->setDisabled(),
             // @todo This contains HTML, so figure out how to format nicely.
             TextField::new('summary')->setDisabled()->onlyOnDetail(),
-            AssociationField::new('feed')->setDisabled()->onlyOnIndex(),
+            TextField::new('feed.title', 'Feed')->setDisabled()->onlyOnIndex(),
+//            AssociationField::new('feed')->setDisabled()->onlyOnIndex(),
         ];
     }
 
