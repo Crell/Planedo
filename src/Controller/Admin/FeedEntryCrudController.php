@@ -2,9 +2,9 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\Feed;
 use App\Entity\FeedEntry;
 use App\Message\RejectEntry;
+use App\Message\RestoreEntry;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -54,6 +54,11 @@ class FeedEntryCrudController extends AbstractCrudController
             ->linkToCrudAction('rejectEntry')
             ->displayIf(static fn (FeedEntry $entry) => !$entry->getRejected());
 
+        $restoreEntry = Action::new('restoreEntry', 'Restore')
+            ->displayAsLink()
+            ->linkToCrudAction('restoreEntry')
+            ->displayIf(static fn (FeedEntry $entry) => $entry->getRejected());
+
         $actions
             ->disable(Action::NEW)
             ->disable(Action::EDIT)
@@ -61,6 +66,7 @@ class FeedEntryCrudController extends AbstractCrudController
             ->disable(Action::BATCH_DELETE)
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
             ->add(Crud::PAGE_INDEX, $rejectEntry)
+            ->add(Crud::PAGE_INDEX, $restoreEntry)
         ;
 
         $rejectEntries = Action::new('rejectEntries', 'Reject')
@@ -68,8 +74,14 @@ class FeedEntryCrudController extends AbstractCrudController
             ->addCssClass('btn btn-primary')
             ->setIcon('fa fa-user-check')
         ;
+        $restoreEntries = Action::new('restoreEntries', 'Restore')
+            ->linkToCrudAction('batchRestoreEntries')
+            ->addCssClass('btn btn-primary')
+            ->setIcon('fa fa-user-check')
+        ;
 
         $actions->addBatchAction($rejectEntries);
+        $actions->addBatchAction($restoreEntries);
 
         return $actions;
     }
@@ -88,12 +100,36 @@ class FeedEntryCrudController extends AbstractCrudController
 
     public function rejectEntry(AdminContext $context, MessageBusInterface $bus): Response
     {
-        /** @var Feed $entry */
+        /** @var FeedEntry $entry */
         $entry = $context->getEntity()->getInstance();
 
-        $bus->dispatch(new RejectEntry($entry->getId()));
+        $bus->dispatch(new RestoreEntry($entry->getId()));
 
         $this->addFlash('notice', sprintf('Rejected entry: %s', $entry->getTitle()));
+
+        return $this->redirect($context->getReferrer());
+    }
+
+    public function batchRestoreEntries(BatchActionDto $context, MessageBusInterface $bus): Response
+    {
+        $ids = $context->getEntityIds();
+        foreach ($ids as $id) {
+            $bus->dispatch(new RestoreEntry($id));
+        }
+
+        $this->addFlash('notice', sprintf('%d entries restored.', count($ids)));
+
+        return $this->redirect($context->getReferrerUrl());
+    }
+
+    public function restoreEntry(AdminContext $context, MessageBusInterface $bus): Response
+    {
+        /** @var FeedEntry $entry */
+        $entry = $context->getEntity()->getInstance();
+
+        $bus->dispatch(new RestoreEntry($entry->getId()));
+
+        $this->addFlash('notice', sprintf('Restored entry: %s', $entry->getTitle()));
 
         return $this->redirect($context->getReferrer());
     }
