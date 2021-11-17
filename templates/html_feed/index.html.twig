@@ -13,11 +13,11 @@
 
         <div>
         {% if previous >= 0 %}
-            <a href="{{ path('html_main', { offset: previous }) }}">Previous</a>
+            <a href="{{ path('html_main', { offset: previous }) }}" rel="prev">Previous</a>
         {% endif %}
 
         {% if next < entries|length %}
-            <a href="{{ path('html_main', { offset: next }) }}">Next</a>
+            <a href="{{ path('html_main', { offset: next }) }}" rel="next">Next</a>
         {% endif %}
         </div>
 

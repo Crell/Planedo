@@ -6,7 +6,6 @@ use App\Entity\Feed;
 use App\Entity\FeedEntry;
 use App\Message\UpdateFeed;
 use App\Repository\FeedEntryRepository;
-use App\Repository\FeedRepository;
 use App\Tests\Mocks\MockFeedReaderHttpClient;
 use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Feed\Reader\Http\ClientInterface;
@@ -19,15 +18,30 @@ class HtmlFeedTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $container = self::getContainer();
-
         $this->mockFeedClient();
         $this->populateFeeds();
 
         $crawler = $client->request('GET', '/');
 
         self::assertResponseIsSuccessful();
-//        self::assertSelectorTextContains('h1', 'Hello World');
+
+        // Confirm the number of articles on the first page.
+        $articles = $crawler->filter('article');
+        self::assertCount(FeedEntryRepository::ItemsPerPage, $articles);
+
+        // Confirm there is next link but no prev link, since it's the front page.
+        $next = $crawler->filter('a[rel="next"]');
+        self::assertCount(1, $next);
+        $prev = $crawler->filter('a[rel="prev"]');
+        self::assertCount(0, $prev);
+
+        $this->assertRawEntryCount();
+    }
+
+    // This method is probably just temporary for debugging other tests.
+    protected function assertRawEntryCount(): void
+    {
+        $container = self::getContainer();
 
         /** @var EntityManagerInterface $em */
         $em = $container->get(EntityManagerInterface::class);
