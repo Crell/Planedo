@@ -4,12 +4,11 @@ namespace App\MessageHandler;
 
 use App\Entity\Feed;
 use App\Entity\FeedEntry;
-use App\GuzzleClient;
+use App\FeedReader;
 use App\Message\UpdateFeed;
 use App\Repository\FeedEntryRepository;
 use App\Repository\FeedRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Laminas\Feed\Reader\Reader;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
@@ -21,6 +20,7 @@ final class UpdateFeedHandler implements MessageHandlerInterface
 
     public function __construct(
         private EntityManagerInterface $em,
+        private FeedReader $reader,
         private ?LoggerInterface $logger = null,
     ) {
         $this->logger ??= new NullLogger();
@@ -31,10 +31,6 @@ final class UpdateFeedHandler implements MessageHandlerInterface
 
     public function __invoke(UpdateFeed $message): void
     {
-        /** @var FeedRepository $repo */
-//        $feedRepo = $this->em->getRepository(Feed::class);
-//        $entryRepo = $this->em->getRepository(FeedEntryRepository::class);
-
         $feed = $this->feedRepo->find($message->feedId);
 
         if (is_null($feed)) {
@@ -43,13 +39,13 @@ final class UpdateFeedHandler implements MessageHandlerInterface
         }
 
         try {
-            Reader::setHttpClient(new GuzzleClient());
-            $feedData = Reader::import($feed?->getLink());
+            $feedData = $this->reader->import($feed?->getLink());
         } catch (\Laminas\Feed\Reader\Exception\RuntimeException $e) {
             $this->logger->error('Exception caught importing feed {name}', [
                 'name' => $feed->getTitle(),
                 'exception' => $e,
             ]);
+            return;
         }
 
         $this->em->wrapInTransaction(function (EntityManagerInterface $em) use ($feed, $feedData) {
