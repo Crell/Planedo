@@ -32,7 +32,12 @@ class Feed
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private \DateTimeImmutable $lastUpdated;
 
-    #[ORM\OneToMany(mappedBy: 'feed', targetEntity: FeedEntry::class, orphanRemoval: true)]
+    #[ORM\OneToMany(
+        mappedBy: 'feed',
+        targetEntity: FeedEntry::class,
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true,
+    )]
     private Collection $entries;
 
     // The fields below here are data from the feed, cached locally.

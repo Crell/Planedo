@@ -8,34 +8,31 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: FeedEntryRepository::class)]
 class FeedEntry
 {
-//    #[ORM\Id]
-//    #[ORM\GeneratedValue]
-//    #[ORM\Column(type: 'integer')]
-//    private int $id;
-
     #[ORM\Id]
     #[ORM\Column(type: 'string', length: 255)]
     private string $link;
 
-//    #[ORM\Id]
     #[ORM\ManyToOne(targetEntity: Feed::class, inversedBy: 'entries')]
     #[ORM\JoinColumn(nullable: false)]
-    private $feed;
+    private Feed $feed;
 
     #[ORM\Column(type: 'string', length: 255)]
     private string $title;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private string $authorName;
-
     #[ORM\Column(type: 'text')]
-    private string $summary;
-
-    #[ORM\Column(type: 'datetime_immutable')]
-    private \DateTimeImmutable $modified;
+    private string $description;
 
     #[ORM\Column(type: 'boolean')]
     private bool $rejected = false;
+
+    #[ORM\Column(type: 'array')]
+    private array $authors = [];
+
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private \DateTimeImmutable $dateCreated;
+
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private \DateTimeImmutable $dateModified;
 
     public function getId(): string
     {
@@ -66,26 +63,14 @@ class FeedEntry
         return $this;
     }
 
-    public function getSummary(): ?string
+    public function getDescription(): ?string
     {
-        return $this->summary;
+        return $this->description;
     }
 
-    public function setSummary(string $summary): self
+    public function setDescription(string $description): self
     {
-        $this->summary = $summary;
-
-        return $this;
-    }
-
-    public function getAuthorName(): ?string
-    {
-        return $this->authorName;
-    }
-
-    public function setAuthorName(string $authorName): self
-    {
-        $this->authorName = $authorName;
+        $this->description = $description;
 
         return $this;
     }
@@ -102,18 +87,6 @@ class FeedEntry
         return $this;
     }
 
-    public function getModified(): ?\DateTimeImmutable
-    {
-        return $this->modified;
-    }
-
-    public function setModified(\DateTimeImmutable $modified): self
-    {
-        $this->modified = $modified;
-
-        return $this;
-    }
-
     public function getRejected(): bool
     {
         return $this->rejected;
@@ -122,6 +95,42 @@ class FeedEntry
     public function setRejected(bool $rejected): self
     {
         $this->rejected = $rejected;
+
+        return $this;
+    }
+
+    public function getAuthors(): ?array
+    {
+        return $this->authors;
+    }
+
+    public function setAuthors(array $authors): self
+    {
+        $this->authors = $authors;
+
+        return $this;
+    }
+
+    public function getDateCreated(): ?\DateTimeImmutable
+    {
+        return $this->dateCreated;
+    }
+
+    public function setDateCreated(?\DateTimeImmutable $dateCreated): self
+    {
+        $this->dateCreated = $dateCreated;
+
+        return $this;
+    }
+
+    public function getDateModified(): ?\DateTimeImmutable
+    {
+        return $this->dateModified;
+    }
+
+    public function setDateModified(?\DateTimeImmutable $dateModified): self
+    {
+        $this->dateModified = $dateModified;
 
         return $this;
     }

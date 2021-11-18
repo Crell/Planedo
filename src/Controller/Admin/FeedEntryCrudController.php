@@ -30,7 +30,7 @@ class FeedEntryCrudController extends AbstractCrudController
             ->setEntityLabelInSingular('Feed entry')
             ->setEntityLabelInPlural('Feed entries')
             ->setPaginatorPageSize(50)
-            ->setDefaultSort(['modified' => 'DESC'])
+            ->setDefaultSort(['dateModified' => 'DESC'])
         ;
     }
 

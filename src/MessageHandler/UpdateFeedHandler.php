@@ -11,7 +11,6 @@ use App\Repository\FeedRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Feed\Reader\Collection\Author;
 use Laminas\Feed\Reader\Entry\EntryInterface;
-use Laminas\Feed\Reader\Entry\Rss;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
@@ -99,14 +98,23 @@ final class UpdateFeedHandler implements MessageHandlerInterface
             /** @var EntryInterface $item */
             foreach ($feedData as $item) {
                 $entry = $lookup[$item->getLink()] ?? new FeedEntry();
+
+                /** @var Author $authors */
+                $authors = $feedData->getAuthors() ?? [];
+                $authorNames = [];
+                foreach ($authors as $a) {
+                    $authorNames[] = $a['name'];
+                }
+                $feed->setAuthors($authorNames);
+
                 $entry
                     ->setFeed($feed)
                     ->setTitle($item->getTitle())
                     ->setLink($item->getLink())
-                    ->setSummary($item->getDescription() ?? '')
-                    ->setModified($item->getDateModified() ? \DateTimeImmutable::createFromInterface($item->getDateModified()) : new \DateTimeImmutable())
-                    // @todo Pretty sure this needs to be redesigned.
-                    ->setAuthorName('' /* $item->getAuthor(0)['name'] */)
+                    ->setDescription($item->getDescription() ?? '')
+                    ->setDateModified($item->getDateModified() ? \DateTimeImmutable::createFromInterface($item->getDateModified()) : null)
+                    ->setDateCreated($item->getDateCreated() ? \DateTimeImmutable::createFromInterface($item->getDateCreated()) : null)
+                    ->setAuthors($authorNames)
                 ;
                 $em->persist($entry);
                 $feed->addEntry($entry);

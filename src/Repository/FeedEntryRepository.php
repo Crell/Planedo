@@ -25,7 +25,7 @@ class FeedEntryRepository extends ServiceEntityRepository
     public function latestEntriesPaginator(int $offset): Paginator
     {
         $query = $this->createQueryBuilder('f')
-            ->orderBy('f.modified', 'DESC')
+            ->orderBy('f.dateModified', 'DESC')
             ->setMaxResults(static::ItemsPerPage)
             ->setFirstResult($offset)
             ->getQuery();

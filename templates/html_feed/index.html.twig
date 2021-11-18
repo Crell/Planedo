@@ -7,7 +7,7 @@
     {% if entries|length > 0 %}
         {% for entry in entries  %}
             <article>
-                {{ entry.summary| raw }}
+                {{ entry.description| raw }}
             </article>
         {% endfor %}
 
