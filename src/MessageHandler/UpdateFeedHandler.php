@@ -83,21 +83,9 @@ final class UpdateFeedHandler implements MessageHandlerInterface
             }
             $feed->setAuthors($authorNames);
 
-            // Doctrine... seemingly can't handle delete-and-recreate as a way to handle
-            // dependent objects, AND there's no O(1) way to find a particular related object
-            // by ID.  So we have to build our own.  Ideally someone who knows Doctrine better
-            // than I do will figure out a cleaner way to do this.
-
-            /** @var FeedEntry[] $existing */
-            $existing = $feed->getEntries()->getValues();
-            $lookup = [];
-            foreach ($existing as $current) {
-                $lookup[$current->getLink()] = $current;
-            }
-
             /** @var EntryInterface $item */
             foreach ($feedData as $item) {
-                $entry = $lookup[$item->getLink()] ?? new FeedEntry();
+                $entry = $em->find(FeedEntry::class, $item->getLink()) ?? new FeedEntry();
 
                 /** @var Author $authors */
                 $authors = $feedData->getAuthors() ?? [];
@@ -117,7 +105,6 @@ final class UpdateFeedHandler implements MessageHandlerInterface
                     ->setAuthors($authorNames)
                 ;
                 $em->persist($entry);
-                $feed->addEntry($entry);
             }
 
             // Mark that it has been updated.
