@@ -13,13 +13,13 @@ class FeedFixtures extends Fixture
         $feed = new Feed();
         $feed
             ->setTitle('Garfieldtech')
-            ->setLink('https://www.garfieldtech.com/blog/feed');
+            ->setFeedLink('https://www.garfieldtech.com/blog/feed');
         $manager->persist($feed);
 
         $feed = new Feed();
         $feed
             ->setTitle('Planet PHP RSS')
-            ->setLink('http://www.planet-php.org/rss/');
+            ->setFeedLink('http://www.planet-php.org/rss/');
         $manager->persist($feed);
 
         $manager->flush();

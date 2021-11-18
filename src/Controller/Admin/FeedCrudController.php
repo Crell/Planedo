@@ -28,7 +28,7 @@ class FeedCrudController extends AbstractCrudController
         return [
             IdField::new('id')->onlyWhenUpdating()->setDisabled(),
             TextField::new('title'),
-            TextField::new('link'),
+            TextField::new('feedLink', 'Feed URL'),
             DateTimeField::new('lastUpdated')->hideWhenCreating()->setDisabled(),
         ];
     }

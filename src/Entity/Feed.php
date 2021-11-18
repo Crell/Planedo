@@ -18,14 +18,49 @@ class Feed
     #[ORM\Column(type: 'string', length: 255)]
     private string $title;
 
-    #[ORM\Column(type: 'string', length: 255)]
-    private string $link;
+    /**
+     * The URL of the machine-parsable RSS/Atom feed.
+     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private string $feedLink;
+
+    /**
+     * The last time this feed was updated from its source.
+     *
+     * This is not a field in the feed itself.
+     */
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private \DateTimeImmutable $lastUpdated;
 
     #[ORM\OneToMany(mappedBy: 'feed', targetEntity: FeedEntry::class, orphanRemoval: true)]
-    private $entries;
+    private Collection $entries;
+
+    // The fields below here are data from the feed, cached locally.
+
+    /**
+     * The HTML link of this feed, NOT the XML feed.
+     */
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $link = '';
+
+    #[ORM\Column(type: 'array')]
+    private array $authors = [];
+
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $copyright = '';
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
-    private $lastUpdated;
+    private ?\DateTimeImmutable $dateCreated;
+
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeImmutable $dateModified;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $generator = '';
+
+    #[ORM\Column(type: 'string', length: 6)]
+    private string $language = '';
+
 
     public function __construct()
     {
@@ -71,10 +106,18 @@ class Feed
 
     public function addEntry(FeedEntry $entry): self
     {
-        if (!$this->entries->contains($entry)) {
-            $this->entries[] = $entry;
-            $entry->setFeed($this);
+        // The default Collection::contains() logic seems
+        // like it doesn't work, so do it manually.
+        /** @var FeedEntry $existing */
+        foreach ($this->entries as $key => $existing) {
+            if ($existing->getId() === $entry->getId()) {
+                $this->entries->set($key, $entry);
+                return $this;
+            }
         }
+
+        $this->entries[] = $entry;
+        $entry->setFeed($this);
 
         return $this;
     }
@@ -99,6 +142,90 @@ class Feed
     public function setLastUpdated(\DateTimeImmutable $lastUpdated): self
     {
         $this->lastUpdated = $lastUpdated;
+
+        return $this;
+    }
+
+    public function getAuthors(): ?array
+    {
+        return $this->authors;
+    }
+
+    public function setAuthors(array $authors): self
+    {
+        $this->authors = $authors;
+
+        return $this;
+    }
+
+    public function getCopyright(): ?string
+    {
+        return $this->copyright;
+    }
+
+    public function setCopyright(?string $copyright): self
+    {
+        $this->copyright = $copyright;
+
+        return $this;
+    }
+
+    public function getDateCreated(): ?\DateTimeImmutable
+    {
+        return $this->dateCreated;
+    }
+
+    public function setDateCreated(?\DateTimeImmutable $dateCreated): self
+    {
+        $this->dateCreated = $dateCreated;
+
+        return $this;
+    }
+
+    public function getDateModified(): ?\DateTimeImmutable
+    {
+        return $this->dateModified;
+    }
+
+    public function setDateModified(?\DateTimeImmutable $dateModified): self
+    {
+        $this->dateModified = $dateModified;
+
+        return $this;
+    }
+
+    public function getGenerator(): ?string
+    {
+        return $this->generator;
+    }
+
+    public function setGenerator(?string $generator): self
+    {
+        $this->generator = $generator;
+
+        return $this;
+    }
+
+    public function getLanguage(): ?string
+    {
+        return $this->language;
+    }
+
+    public function setLanguage(?string $language): self
+    {
+        $this->language = $language;
+
+        return $this;
+    }
+
+    public function getFeedLink(): ?string
+    {
+        return $this->feedLink;
+    }
+
+    public function setFeedLink(?string $feedLink): self
+    {
+        $this->feedLink = $feedLink;
 
         return $this;
     }
