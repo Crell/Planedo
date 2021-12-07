@@ -2,7 +2,7 @@
 
 namespace App\Message;
 
-final class RestoreEntry
+final class ApproveEntry
 {
     public function __construct(
         public string $entryId,

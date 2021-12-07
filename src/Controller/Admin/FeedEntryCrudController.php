@@ -4,7 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\FeedEntry;
 use App\Message\RejectEntry;
-use App\Message\RestoreEntry;
+use App\Message\ApproveEntry;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -12,6 +12,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\BatchActionDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,6 +32,7 @@ class FeedEntryCrudController extends AbstractCrudController
             ->setEntityLabelInPlural('Feed entries')
             ->setPaginatorPageSize(50)
             ->setDefaultSort(['dateModified' => 'DESC'])
+            ->setPageTitle(Crud::PAGE_DETAIL, static fn (FeedEntry $entry) => $entry->getTitle())
         ;
     }
 
@@ -39,8 +41,9 @@ class FeedEntryCrudController extends AbstractCrudController
         return [
             TextField::new('title')->setDisabled(),
             TextField::new('link')->setDisabled(),
-            DateTimeField::new('modified', 'Date')->setDisabled(),
+            DateTimeField::new('dateModified', 'Date')->setDisabled(),
             // @todo This contains HTML, so figure out how to format nicely.
+            BooleanField::new('approved', 'Approved')->setDisabled(),
             TextField::new('summary')->setDisabled()->onlyOnDetail(),
             TextField::new('feed.title', 'Feed')->setDisabled()->onlyOnIndex(),
 //            AssociationField::new('feed')->setDisabled()->onlyOnIndex(),
@@ -52,12 +55,12 @@ class FeedEntryCrudController extends AbstractCrudController
         $rejectEntry = Action::new('rejectEntry', 'Reject')
             ->displayAsLink()
             ->linkToCrudAction('rejectEntry')
-            ->displayIf(static fn (FeedEntry $entry) => !$entry->getRejected());
+            ->displayIf(static fn (FeedEntry $entry): bool => $entry->isApproved());
 
-        $restoreEntry = Action::new('restoreEntry', 'Restore')
+        $approveEntry = Action::new('approveEntry', 'Approve')
             ->displayAsLink()
-            ->linkToCrudAction('restoreEntry')
-            ->displayIf(static fn (FeedEntry $entry) => $entry->getRejected());
+            ->linkToCrudAction('approveEntry')
+            ->displayIf(static fn (FeedEntry $entry): bool => !$entry->isApproved());
 
         $actions
             ->disable(Action::NEW)
@@ -66,7 +69,9 @@ class FeedEntryCrudController extends AbstractCrudController
             ->disable(Action::BATCH_DELETE)
             ->add(Crud::PAGE_INDEX, Action::DETAIL)
             ->add(Crud::PAGE_INDEX, $rejectEntry)
-            ->add(Crud::PAGE_INDEX, $restoreEntry)
+            ->add(Crud::PAGE_INDEX, $approveEntry)
+            ->add(Crud::PAGE_DETAIL, $rejectEntry)
+            ->add(Crud::PAGE_DETAIL, $approveEntry)
         ;
 
         $rejectEntries = Action::new('rejectEntries', 'Reject')
@@ -74,8 +79,8 @@ class FeedEntryCrudController extends AbstractCrudController
             ->addCssClass('btn btn-primary')
             ->setIcon('fa fa-user-check')
         ;
-        $restoreEntries = Action::new('restoreEntries', 'Restore')
-            ->linkToCrudAction('batchRestoreEntries')
+        $restoreEntries = Action::new('approveEntries', 'Approve')
+            ->linkToCrudAction('batchApproveEntries')
             ->addCssClass('btn btn-primary')
             ->setIcon('fa fa-user-check')
         ;
@@ -103,33 +108,33 @@ class FeedEntryCrudController extends AbstractCrudController
         /** @var FeedEntry $entry */
         $entry = $context->getEntity()->getInstance();
 
-        $bus->dispatch(new RestoreEntry($entry->getId()));
+        $bus->dispatch(new RejectEntry($entry->getId()));
 
         $this->addFlash('notice', sprintf('Rejected entry: %s', $entry->getTitle()));
 
         return $this->redirect($context->getReferrer());
     }
 
-    public function batchRestoreEntries(BatchActionDto $context, MessageBusInterface $bus): Response
+    public function batchApproveEntries(BatchActionDto $context, MessageBusInterface $bus): Response
     {
         $ids = $context->getEntityIds();
         foreach ($ids as $id) {
-            $bus->dispatch(new RestoreEntry($id));
+            $bus->dispatch(new ApproveEntry($id));
         }
 
-        $this->addFlash('notice', sprintf('%d entries restored.', count($ids)));
+        $this->addFlash('notice', sprintf('%d entries approved.', count($ids)));
 
         return $this->redirect($context->getReferrerUrl());
     }
 
-    public function restoreEntry(AdminContext $context, MessageBusInterface $bus): Response
+    public function approveEntry(AdminContext $context, MessageBusInterface $bus): Response
     {
         /** @var FeedEntry $entry */
         $entry = $context->getEntity()->getInstance();
 
-        $bus->dispatch(new RestoreEntry($entry->getId()));
+        $bus->dispatch(new ApproveEntry($entry->getId()));
 
-        $this->addFlash('notice', sprintf('Restored entry: %s', $entry->getTitle()));
+        $this->addFlash('notice', sprintf('Approved entry: %s', $entry->getTitle()));
 
         return $this->redirect($context->getReferrer());
     }

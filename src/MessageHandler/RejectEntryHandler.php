@@ -32,7 +32,7 @@ final class RejectEntryHandler implements MessageHandlerInterface
             ]);
         }
 
-        $entry->setRejected(true);
+        $entry->setApproved(false);
 
         $this->em->persist($entry);
         $this->em->flush();

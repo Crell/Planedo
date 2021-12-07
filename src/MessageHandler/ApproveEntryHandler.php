@@ -3,14 +3,14 @@
 namespace App\MessageHandler;
 
 use App\Entity\FeedEntry;
-use App\Message\RestoreEntry;
+use App\Message\ApproveEntry;
 use App\Repository\FeedEntryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
-final class RestoreEntryHandler implements MessageHandlerInterface
+final class ApproveEntryHandler implements MessageHandlerInterface
 {
     private FeedEntryRepository $entryRepo;
 
@@ -23,7 +23,7 @@ final class RestoreEntryHandler implements MessageHandlerInterface
         $this->entryRepo = $this->em->getRepository(FeedEntry::class);
     }
 
-    public function __invoke(RestoreEntry $message)
+    public function __invoke(ApproveEntry $message)
     {
         $entry = $this->entryRepo->find($message->entryId);
         if (!$entry) {
@@ -32,7 +32,7 @@ final class RestoreEntryHandler implements MessageHandlerInterface
             ]);
         }
 
-        $entry->setRejected(false);
+        $entry->setApproved(true);
 
         $this->em->persist($entry);
         $this->em->flush();

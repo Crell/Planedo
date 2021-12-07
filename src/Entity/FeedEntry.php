@@ -23,7 +23,7 @@ class FeedEntry
     private string $description;
 
     #[ORM\Column(type: 'boolean')]
-    private bool $rejected = false;
+    private bool $approved = true;
 
     #[ORM\Column(type: 'array')]
     private array $authors = [];
@@ -87,14 +87,14 @@ class FeedEntry
         return $this;
     }
 
-    public function getRejected(): bool
+    public function isApproved(): bool
     {
-        return $this->rejected;
+        return $this->approved;
     }
 
-    public function setRejected(bool $rejected): self
+    public function setApproved(bool $approved): self
     {
-        $this->rejected = $rejected;
+        $this->approved = $approved;
 
         return $this;
     }
