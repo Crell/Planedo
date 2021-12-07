@@ -51,7 +51,7 @@ class AtomFeedController extends AbstractController
     {
         $entry = $feed->createEntry();
         $entry->setTitle($record->getTitle());
-        $entry->setDateModified($record->getModified());
+        $entry->setDateModified($record->getDateModified());
         $entry->setLink($record->getLink());
         if ($summary = $record->getDescription()) {
             $entry->setDescription($summary);
