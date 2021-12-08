@@ -22,6 +22,12 @@ class FeedFixtures extends Fixture
             ->setFeedLink('http://www.planet-php.org/rss/');
         $manager->persist($feed);
 
+        $feed = new Feed();
+        $feed
+            ->setTitle('Fake Feed')
+            ->setFeedLink('http://www.example.com/');
+        $manager->persist($feed);
+
         $manager->flush();
     }
 }

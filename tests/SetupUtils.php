@@ -26,7 +26,7 @@ trait SetupUtils
         /** @var FeedEntryRepository $entryRepo */
         $entryRepo = $em->getRepository(FeedEntry::class);
         $entries = $entryRepo->findAll();
-        self::assertCount(20, $entries);
+        self::assertCount(23, $entries);
     }
 
     protected function mockFeedClient(): void
@@ -37,6 +37,7 @@ trait SetupUtils
             'https://www.garfieldtech.com/blog/feed' => 'tests/feed-data/garfieldtech.rss',
             'http://www.planet-php.org/rss/' => 'tests/feed-data/planetphp.092.rss',
             'http://www.planet-php.org/rdf/' => 'tests/feed-data/planetphp.10.xml',
+            'http://www.example.com/' => 'tests/feed-data/fake1.rss',
         ]);
 
         $container->set(ClientInterface::class, $mockClient);
@@ -54,7 +55,7 @@ trait SetupUtils
 
         /** @var Feed[] $feeds */
         $feeds = $em->getRepository(Feed::class)->findAll();
-        self::assertCount(2, $feeds);
+        self::assertCount(3, $feeds);
         foreach ($feeds as $feed) {
             $bus->dispatch(new UpdateFeed($feed->getId()));
         }

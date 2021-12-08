@@ -26,8 +26,10 @@ class FeedEntryRepository extends ServiceEntityRepository
     {
         $query = $this->createQueryBuilder('f')
             ->orderBy('f.dateModified', 'DESC')
+            ->where('f.approved = :approved')
             ->setMaxResults(static::ItemsPerPage)
             ->setFirstResult($offset)
+            ->setParameter('approved', true)
             ->getQuery();
 
         return new Paginator($query);

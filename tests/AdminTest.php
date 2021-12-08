@@ -46,4 +46,5 @@ class AdminTest extends WebTestCase
         self::assertResponseIsSuccessful();
     }
 
+
 }
