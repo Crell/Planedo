@@ -15,9 +15,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class FeedEntryRepository extends ServiceEntityRepository
 {
-    public const ItemsPerPage = 5;
-
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, protected int $itemsPerPage)
     {
         parent::__construct($registry, FeedEntry::class);
     }
@@ -27,7 +25,7 @@ class FeedEntryRepository extends ServiceEntityRepository
         $query = $this->createQueryBuilder('f')
             ->orderBy('f.dateModified', 'DESC')
             ->where('f.approved = :approved')
-            ->setMaxResults(static::ItemsPerPage)
+            ->setMaxResults($this->itemsPerPage)
             ->setFirstResult($offset)
             ->setParameter('approved', true)
             ->getQuery();

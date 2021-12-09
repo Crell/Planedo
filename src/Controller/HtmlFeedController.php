@@ -12,6 +12,7 @@ class HtmlFeedController extends AbstractController
 {
     public function __construct(
         protected FeedEntryRepository $repository,
+        protected int $itemsPerPage,
     ) {}
 
     #[Route('/', name: 'html_main')]
@@ -23,8 +24,8 @@ class HtmlFeedController extends AbstractController
         return $this->render('html_feed/index.html.twig', [
             'controller_name' => 'HtmlFeedController',
             'entries' => $paginator,
-            'previous' => $offset - FeedEntryRepository::ItemsPerPage,
-            'next' => min(count($paginator), $offset + FeedEntryRepository::ItemsPerPage),
+            'previous' => $offset - $this->itemsPerPage,
+            'next' => min(count($paginator), $offset + $this->itemsPerPage),
         ]);
     }
 }

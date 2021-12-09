@@ -25,9 +25,11 @@ class HtmlFeedTest extends WebTestCase
 
         self::assertResponseIsSuccessful();
 
+        $container = self::getContainer();
+
         // Confirm the number of articles on the first page.
         $articles = $crawler->filter('article');
-        self::assertCount(FeedEntryRepository::ItemsPerPage, $articles);
+        self::assertCount($container->getParameter('app.feeds.items-per-page'), $articles);
 
         // Confirm there is next link but no prev link, since it's the front page.
         $next = $crawler->filter('a[rel="next"]');
