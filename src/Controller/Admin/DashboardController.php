@@ -13,13 +13,14 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DashboardController extends AbstractDashboardController
 {
+    public function __construct(
+        protected AdminUrlGenerator $routeBuilder,
+    ) {}
+
     #[Route('/admin', name: 'admin')]
     public function index(): Response
     {
-        // redirect to some CRUD controller
-        $routeBuilder = $this->get(AdminUrlGenerator::class);
-
-        return $this->redirect($routeBuilder->setController(FeedCrudController::class)->generateUrl());
+        return $this->redirect($this->routeBuilder->setController(FeedCrudController::class)->generateUrl());
     }
 
     public function configureDashboard(): Dashboard
