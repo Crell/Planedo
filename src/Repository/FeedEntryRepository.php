@@ -33,6 +33,16 @@ class FeedEntryRepository extends ServiceEntityRepository
         return new Paginator($query);
     }
 
+    public function deleteOlderThan(\DateTimeImmutable $threshold)
+    {
+        $this->_em->createQueryBuilder()
+            ->delete(FeedEntry::class, 'e')
+            ->where('e.dateModified < :threshold')
+            ->setParameter('threshold', $threshold)
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return FeedEntry[] Returns an array of FeedEntry objects
     //  */
