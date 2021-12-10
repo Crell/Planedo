@@ -11,6 +11,7 @@ use App\Repository\FeedRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Feed\Reader\Collection\Author;
 use Laminas\Feed\Reader\Entry\EntryInterface;
+use Laminas\Feed\Reader\Feed\FeedInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
@@ -51,60 +52,12 @@ final class UpdateFeedHandler implements MessageHandlerInterface
         }
 
         $this->em->wrapInTransaction(function (EntityManagerInterface $em) use ($feed, $feedData) {
-            $optional = [
-                'Link',
-                // getFeedLink() is broken and buggy, so don't use it
-                // cf: https://github.com/laminas/laminas-feed/issues/44
-                //'FeedLink',
-                'Copyright',
-                'DateCreated',
-                'DateModified',
-                'Generator',
-                'Language',
-            ];
-
-            // Update the feed itself with data from the feed.
-            foreach ($optional as $method) {
-                $val = $feedData->{'get' . $method}();
-                if ($val) {
-                    $feed->{'set' . $method}($val);
-                }
-            }
-
-            // Authors are an over-engineered array, which has a singular name
-            // even though it's an iterable, even though getAuthors() is typed
-            // to return an array. Bad design in Laminas Feed. That's why we can't
-            // easily just use a map operation.
-            /** @var Author $authors */
-            $authors = $feedData->getAuthors() ?? [];
-            $authorNames = [];
-            foreach ($authors as $a) {
-                $authorNames[] = $a['name'];
-            }
-            $feed->setAuthors($authorNames);
+            $feed = $this->updateFeed($feed, $feedData);
 
             /** @var EntryInterface $item */
             foreach ($feedData as $item) {
-                $entry = $em->find(FeedEntry::class, $item->getLink()) ?? new FeedEntry();
-
-                /** @var Author $authors */
-                $authors = $feedData->getAuthors() ?? [];
-                $authorNames = [];
-                foreach ($authors as $a) {
-                    $authorNames[] = $a['name'];
-                }
-                $feed->setAuthors($authorNames);
-
-                $entry
-                    ->setFeed($feed)
-                    ->setTitle($item->getTitle())
-                    ->setLink($item->getLink())
-                    ->setDescription($item->getDescription() ?? '')
-                    ->setDateModified($item->getDateModified() ? \DateTimeImmutable::createFromInterface($item->getDateModified()) : null)
-                    ->setDateCreated($item->getDateCreated() ? \DateTimeImmutable::createFromInterface($item->getDateCreated()) : null)
-                    ->setAuthors($authorNames)
-                ;
-                $em->persist($entry);
+                // @todo Turn this into a map operation, once we depend on Crell/fp.
+                $this->updateFeedEntry($item, $em, $feed);
             }
 
             // Mark that it has been updated.
@@ -113,5 +66,68 @@ final class UpdateFeedHandler implements MessageHandlerInterface
             $em->persist($feed);
             $em->flush();
         });
+    }
+
+    protected function updateFeedEntry(EntryInterface $item, EntityManagerInterface $em, Feed $feed): FeedEntry
+    {
+        $entry = $em->find(FeedEntry::class, $item->getLink()) ?? new FeedEntry();
+
+        /** @var Author $authors */
+        $authors = $item->getAuthors() ?? [];
+        $authorNames = [];
+        foreach ($authors as $a) {
+            $authorNames[] = $a['name'];
+        }
+        $entry->setAuthors($authorNames);
+
+        $entry
+            ->setFeed($feed)
+            ->setTitle($item->getTitle())
+            ->setLink($item->getLink())
+            ->setDescription($item->getDescription() ?? '')
+            ->setDateModified($item->getDateModified() ? \DateTimeImmutable::createFromInterface($item->getDateModified()) : null)
+            ->setDateCreated($item->getDateCreated() ? \DateTimeImmutable::createFromInterface($item->getDateCreated()) : null)
+            ->setAuthors($authorNames)
+        ;
+        $em->persist($entry);
+
+        return $entry;
+    }
+
+    protected function updateFeed(Feed $feed, FeedInterface $feedData): Feed
+    {
+        $optional = [
+            'Link',
+            // getFeedLink() is broken and buggy, so don't use it
+            // cf: https://github.com/laminas/laminas-feed/issues/44
+            //'FeedLink',
+            'Copyright',
+            'DateCreated',
+            'DateModified',
+            'Generator',
+            'Language',
+        ];
+
+        // Update the feed itself with data from the feed.
+        foreach ($optional as $method) {
+            $val = $feedData->{'get' . $method}();
+            if ($val) {
+                $feed->{'set' . $method}($val);
+            }
+        }
+
+        // Authors are an over-engineered array, which has a singular name
+        // even though it's an iterable, even though getAuthors() is typed
+        // to return an array. Bad design in Laminas Feed. That's why we can't
+        // easily just use a map operation.
+        /** @var Author $authors */
+        $authors = $feedData->getAuthors() ?? [];
+        $authorNames = [];
+        foreach ($authors as $a) {
+            $authorNames[] = $a['name'];
+        }
+        $feed->setAuthors($authorNames);
+
+        return $feed;
     }
 }
