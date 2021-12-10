@@ -7,25 +7,20 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class FeedFixtures extends Fixture implements FixtureGroupInterface
+class FeedTestFixtures extends Fixture implements FixtureGroupInterface
 {
     public static function getGroups(): array
     {
-        return ['tests', 'manual'];
+        return ['tests'];
     }
+
 
     public function load(ObjectManager $manager): void
     {
         $feed = new Feed();
         $feed
-            ->setTitle('Garfieldtech')
-            ->setFeedLink('https://www.garfieldtech.com/blog/feed');
-        $manager->persist($feed);
-
-        $feed = new Feed();
-        $feed
-            ->setTitle('Planet PHP RSS')
-            ->setFeedLink('http://www.planet-php.org/rss/');
+            ->setTitle('Fake Feed')
+            ->setFeedLink('http://www.example.com/');
         $manager->persist($feed);
 
         $manager->flush();
