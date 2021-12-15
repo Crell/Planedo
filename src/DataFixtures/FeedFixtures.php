@@ -18,14 +18,14 @@ class FeedFixtures extends Fixture implements FixtureGroupInterface
     {
         $feed = new Feed();
         $feed
-            ->setTitle('Garfieldtech')
+            ->setTitle('Garfieldtech RSS')
             ->setFeedLink('https://www.garfieldtech.com/blog/feed');
         $manager->persist($feed);
 
         $feed = new Feed();
         $feed
-            ->setTitle('Planet PHP RSS')
-            ->setFeedLink('http://www.planet-php.org/rss/');
+            ->setTitle('PHP.net Atom')
+            ->setFeedLink('https://www.php.net/feed.atom');
         $manager->persist($feed);
 
         $manager->flush();
