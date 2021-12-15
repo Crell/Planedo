@@ -32,3 +32,6 @@ services:
 
     Laminas\Feed\Reader\Http\ClientInterface:
         alias: App\GuzzleClient
+
+    Psr\Clock\ClockInterface:
+        class: Navarr\WallClock\WallClock

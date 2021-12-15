@@ -5,8 +5,11 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     app.feeds.items-per-page: 5
-    app.feeds.purge-before: -1 day
+    app.feeds.purge-before: -10 days
 services:
     Laminas\Feed\Reader\Http\ClientInterface:
         alias: App\GuzzleClient
+        public: true
+
+    Psr\Clock\ClockInterface:
         public: true
