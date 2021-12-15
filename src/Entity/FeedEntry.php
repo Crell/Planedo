@@ -29,10 +29,10 @@ class FeedEntry
     private array $authors = [];
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
-    private \DateTimeImmutable $dateCreated;
+    private ?\DateTimeImmutable $dateCreated;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
-    private \DateTimeImmutable $dateModified;
+    private ?\DateTimeImmutable $dateModified;
 
     public function getId(): string
     {
@@ -116,8 +116,11 @@ class FeedEntry
         return $this->dateCreated;
     }
 
-    public function setDateCreated(?\DateTimeImmutable $dateCreated): self
+    public function setDateCreated(?\DateTimeInterface $dateCreated): self
     {
+        if ($dateCreated instanceof \DateTime) {
+            $dateCreated = \DateTimeImmutable::createFromMutable($dateCreated);
+        }
         $this->dateCreated = $dateCreated;
 
         return $this;
@@ -128,8 +131,11 @@ class FeedEntry
         return $this->dateModified;
     }
 
-    public function setDateModified(?\DateTimeImmutable $dateModified): self
+    public function setDateModified(?\DateTimeInterface $dateModified): self
     {
+        if ($dateModified instanceof \DateTime) {
+            $dateModified = \DateTimeImmutable::createFromMutable($dateModified);
+        }
         $this->dateModified = $dateModified;
 
         return $this;

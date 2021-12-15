@@ -85,8 +85,8 @@ final class UpdateFeedHandler implements MessageHandlerInterface
             ->setTitle($item->getTitle())
             ->setLink($item->getLink())
             ->setDescription($item->getDescription() ?? '')
-            ->setDateModified($item->getDateModified() ? \DateTimeImmutable::createFromInterface($item->getDateModified()) : null)
-            ->setDateCreated($item->getDateCreated() ? \DateTimeImmutable::createFromInterface($item->getDateCreated()) : null)
+            ->setDateModified($item->getDateModified())
+            ->setDateCreated($item->getDateCreated())
             ->setAuthors($authorNames)
         ;
         $em->persist($entry);
