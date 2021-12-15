@@ -17,6 +17,7 @@ class AdminTest extends WebTestCase
     {
         $client = static::createClient();
 
+        $this->mockClock(new \DateTimeImmutable('02 Dec 2021 01:01:01 +0000'));
         $this->mockFeedClient();
         $this->populateFeeds();
 
@@ -35,6 +36,7 @@ class AdminTest extends WebTestCase
     {
         $client = static::createClient();
 
+        $this->mockClock(new \DateTimeImmutable('02 Dec 2021 01:01:01 +0000'));
         $this->mockFeedClient();
         $this->populateFeeds();
 
@@ -45,6 +47,4 @@ class AdminTest extends WebTestCase
 
         self::assertResponseIsSuccessful();
     }
-
-
 }

@@ -3,7 +3,6 @@
 namespace App\Tests;
 
 use App\Entity\FeedEntry;
-use App\Repository\FeedEntryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -18,6 +17,7 @@ class HtmlFeedTest extends WebTestCase
     {
         $client = static::createClient();
 
+        $this->mockClock(new \DateTimeImmutable('2021-11-15'));
         $this->mockFeedClient();
         $this->populateFeeds();
 
@@ -37,7 +37,8 @@ class HtmlFeedTest extends WebTestCase
         $prev = $crawler->filter('a[rel="prev"]');
         self::assertCount(0, $prev);
 
-        $this->assertRawEntryCount();
+        // Only 11 items would have survived the old-data filter when adding.
+        $this->assertRawEntryCount(11);
     }
 
     /**
@@ -51,6 +52,7 @@ class HtmlFeedTest extends WebTestCase
 
         $client = static::createClient();
 
+        $this->mockClock(new \DateTimeImmutable('02 Dec 2021 01:01:01 +0000'));
         $this->mockFeedClient();
         $this->populateFeeds();
 

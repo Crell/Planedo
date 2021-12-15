@@ -7,12 +7,16 @@ namespace App\Tests;
 use App\Entity\FeedEntry;
 use App\Message\PurgeOldEntries;
 use App\Repository\FeedEntryRepository;
+use App\Tests\Mocks\SettableClock;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Clock\ClockInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 class PurgeTest extends KernelTestCase
 {
+    use SetupUtils;
+
     /**
      * @test
      */
@@ -22,18 +26,25 @@ class PurgeTest extends KernelTestCase
 
         $container = self::getContainer();
 
+        // The first will allow through a few items.
+        $clock = $this->mockClock(new \DateTimeImmutable('02 Dec 2021 01:01:01 +0000'));
+
+        $this->mockFeedClient();
+        $this->populateFeeds();
+
+        $this->assertRawEntryCount(5);
+
+        $container = self::getContainer();
+
         /** @var MessageBusInterface $bus */
         $bus = $container->get(MessageBusInterface::class);
 
-        $bus->dispatch(new PurgeOldEntries(1));
+        // Fast forward time.
+        $clock->set(new \DateTimeImmutable('31 Dec 2021 01:01:01 +0000'));
 
-        /** @var EntityManagerInterface $em */
-        $em = $container->get(EntityManagerInterface::class);
+        // Now all items should be old enough to get purged, leaving none left.
+        $bus->dispatch(new PurgeOldEntries());
 
-        /** @var FeedEntryRepository $entryRepo */
-        $entryRepo = $em->getRepository(FeedEntry::class);
-        $entries = $entryRepo->findAll();
-
-        self::assertCount(0, $entries);
+        $this->assertRawEntryCount(0);
     }
 }

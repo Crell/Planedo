@@ -9,14 +9,15 @@ use App\Entity\FeedEntry;
 use App\Message\UpdateFeed;
 use App\Repository\FeedEntryRepository;
 use App\Tests\Mocks\MockFeedReaderHttpClient;
+use App\Tests\Mocks\SettableClock;
 use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Feed\Reader\Http\ClientInterface;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 trait SetupUtils
 {
-    // This method is probably just temporary for debugging other tests.
-    protected function assertRawEntryCount(): void
+    protected function assertRawEntryCount(int $expected): void
     {
         $container = self::getContainer();
 
@@ -26,7 +27,7 @@ trait SetupUtils
         /** @var FeedEntryRepository $entryRepo */
         $entryRepo = $em->getRepository(FeedEntry::class);
         $entries = $entryRepo->findAll();
-        self::assertCount(23, $entries);
+        self::assertCount($expected, $entries);
     }
 
     protected function mockFeedClient(): void
@@ -37,10 +38,19 @@ trait SetupUtils
             'https://www.garfieldtech.com/blog/feed' => 'tests/feed-data/garfieldtech.rss',
             'http://www.planet-php.org/rss/' => 'tests/feed-data/planetphp.092.rss',
             'http://www.planet-php.org/rdf/' => 'tests/feed-data/planetphp.10.xml',
+            'https://www.php.net/feed.atom' => 'tests/feed-data/phpnet.atom',
             'http://www.example.com/' => 'tests/feed-data/fake1.rss',
         ]);
 
         $container->set(ClientInterface::class, $mockClient);
+    }
+
+    protected function mockClock(\DateTimeImmutable $time): SettableClock
+    {
+        $container = self::getContainer();
+        $clock = new SettableClock($time);
+        $container->set(ClockInterface::class, $clock);
+        return $clock;
     }
 
     protected function populateFeeds(): void

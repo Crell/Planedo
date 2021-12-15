@@ -12,6 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Feed\Reader\Collection\Author;
 use Laminas\Feed\Reader\Entry\EntryInterface;
 use Laminas\Feed\Reader\Feed\FeedInterface;
+use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
@@ -24,6 +25,7 @@ final class UpdateFeedHandler implements MessageHandlerInterface
     public function __construct(
         private EntityManagerInterface $em,
         private FeedReader $reader,
+        private ClockInterface $clock,
         private string $purgeBefore,
         private ?LoggerInterface $logger = null,
     ) {
@@ -55,7 +57,7 @@ final class UpdateFeedHandler implements MessageHandlerInterface
         $this->em->wrapInTransaction(function (EntityManagerInterface $em) use ($feed, $feedData) {
             $feed = $this->updateFeed($feed, $feedData);
 
-            $purgeBefore = new \DateTimeImmutable($this->purgeBefore);
+            $purgeBefore = $this->clock->now()->modify($this->purgeBefore);
 
             /** @var EntryInterface $item */
             foreach ($feedData as $item) {

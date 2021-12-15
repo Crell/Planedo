@@ -6,6 +6,7 @@ use App\Entity\FeedEntry;
 use App\Message\PurgeOldEntries;
 use App\Repository\FeedEntryRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
@@ -16,6 +17,7 @@ final class PurgeOldEntriesHandler implements MessageHandlerInterface
 
     public function __construct(
         private EntityManagerInterface $em,
+        private ClockInterface $clock,
         protected string $purgeBefore,
         private ?LoggerInterface $logger = null,
     ) {
@@ -26,7 +28,7 @@ final class PurgeOldEntriesHandler implements MessageHandlerInterface
 
     public function __invoke(PurgeOldEntries $message)
     {
-        $deleteBefore = new \DateTimeImmutable($this->purgeBefore);
+        $deleteBefore = $this->clock->now()->modify($this->purgeBefore);
 
         try {
             $this->entryRepo->deleteOlderThan($deleteBefore);
