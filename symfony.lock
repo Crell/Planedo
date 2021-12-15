@@ -151,6 +151,9 @@
     "myclabs/deep-copy": {
         "version": "1.10.2"
     },
+    "navarr/wall-clock": {
+        "version": "1.0.x-dev"
+    },
     "nikic/php-parser": {
         "version": "v4.13.1"
     },
@@ -203,6 +206,9 @@
     },
     "psr/cache": {
         "version": "2.0.0"
+    },
+    "psr/clock": {
+        "version": "dev-master"
     },
     "psr/container": {
         "version": "1.1.1"

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "aad4f47a1f63bdfbaa92c6cf50547080",
+    "content-hash": "463130c27f51996dc422ed73575734c1",
     "packages": [
         {
             "name": "composer/package-versions-deprecated",
@@ -2364,6 +2364,70 @@
             "time": "2021-10-01T21:08:31+00:00"
         },
         {
+            "name": "navarr/wall-clock",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/navarr/wall-clock.git",
+                "reference": "77b96a6d4f9c34179b0a3aea72b92cf4e25b6a47"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/navarr/wall-clock/zipball/77b96a6d4f9c34179b0a3aea72b92cf4e25b6a47",
+                "reference": "77b96a6d4f9c34179b0a3aea72b92cf4e25b6a47",
+                "shasum": ""
+            },
+            "require": {
+                "php": "~8.0.0",
+                "psr/clock": "@dev"
+            },
+            "provide": {
+                "psr/clock-implementation": "1.0-dev"
+            },
+            "require-dev": {
+                "infection/infection": "^0.24.0",
+                "jetbrains/phpstorm-attributes": "^1.0",
+                "phpstan/phpstan": "^0.12.96",
+                "phpunit/phpunit": "^9.5",
+                "roave/security-advisories": "dev-master",
+                "squizlabs/php_codesniffer": "^3.6"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Navarr\\WallClock\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Navarr Barnier",
+                    "email": "me@navarr.me"
+                }
+            ],
+            "description": "PSR-20 implementation that returns the current wall (system) time",
+            "support": {
+                "issues": "https://github.com/navarr/wall-clock/issues",
+                "source": "https://github.com/navarr/wall-clock/tree/main"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/navarr",
+                    "type": "github"
+                }
+            ],
+            "time": "2021-12-15T20:22:49+00:00"
+        },
+        {
             "name": "nikic/php-parser",
             "version": "v4.13.2",
             "source": {
@@ -2627,6 +2691,44 @@
                 "source": "https://github.com/php-fig/cache/tree/2.0.0"
             },
             "time": "2021-02-03T23:23:37+00:00"
+        },
+        {
+            "name": "psr/clock",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/clock.git",
+                "reference": "90c0cc32214095d829947dd6811c014581d4c407"
+            },
+            "require": {
+                "php": "^7.0 || ^8.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Clock\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "https://www.php-fig.org/"
+                }
+            ],
+            "description": "[WIP] Not yet proposed Common interface for reading the clock. Might change at any time without prior notice!",
+            "homepage": "https://github.com/php-fig/clock",
+            "keywords": [
+                "clock",
+                "now",
+                "psr",
+                "psr-20",
+                "time"
+            ],
+            "time": "2021-07-26T03:41:58+00:00"
         },
         {
             "name": "psr/container",
@@ -11870,6 +11972,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "psr/clock": 20,
+        "navarr/wall-clock": 20,
         "roave/security-advisories": 20
     },
     "prefer-stable": true,
