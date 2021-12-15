@@ -24,6 +24,7 @@ final class UpdateFeedHandler implements MessageHandlerInterface
     public function __construct(
         private EntityManagerInterface $em,
         private FeedReader $reader,
+        private string $purgeBefore,
         private ?LoggerInterface $logger = null,
     ) {
         $this->logger ??= new NullLogger();
@@ -54,10 +55,14 @@ final class UpdateFeedHandler implements MessageHandlerInterface
         $this->em->wrapInTransaction(function (EntityManagerInterface $em) use ($feed, $feedData) {
             $feed = $this->updateFeed($feed, $feedData);
 
+            $purgeBefore = new \DateTimeImmutable($this->purgeBefore);
+
             /** @var EntryInterface $item */
             foreach ($feedData as $item) {
-                // @todo Turn this into a map operation, once we depend on Crell/fp.
-                $this->updateFeedEntry($item, $em, $feed);
+                // @todo Turn this into a map/filter operation, once we depend on Crell/fp.
+                if ($item->getDateCreated() >= $purgeBefore) {
+                    $this->updateFeedEntry($item, $em, $feed);
+                }
             }
 
             // Mark that it has been updated.
