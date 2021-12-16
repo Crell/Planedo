@@ -14,9 +14,25 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class FeedRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, protected int $itemsPerPage)
     {
         parent::__construct($registry, Feed::class);
+    }
+
+    /**
+     * Gets all feeds, sorted alphabetically by the site name.
+     *
+     * @return Feed[]
+     */
+    public function paginatedByName(int $offset): array
+    {
+        return $this->createQueryBuilder('f')
+            ->orderBy('f.title', 'ASC')
+            ->setMaxResults($this->itemsPerPage)
+            ->setFirstResult($offset)
+            ->getQuery()
+            ->getResult()
+            ;
     }
 
     // /**
