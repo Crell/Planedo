@@ -4,10 +4,15 @@
 {% block body %}
     <h1>{% block title %}{% endblock %}</h1>
 
-    <main>
-        {% block page_contents %}{% endblock %}
-    </main>
-    <div class="sidebar">
+    <div class="content">
+        <main>
+            {% block page_contents %}{% endblock %}
+        </main>
 
+        <div class="sidebar">
+            {{ render(controller(
+                'App\\Controller\\BlogRollController::mostActive', {max: 3}
+            )) }}
+        </div>
     </div>
 {% endblock %}

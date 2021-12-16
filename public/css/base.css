@@ -1,0 +1,23 @@
+article {
+    border: 1px dotted black;
+    margin-bottom: 2em;
+}
+
+div.content {
+    display: grid;
+    grid-template-columns: auto 200px;
+    grid-template-areas:
+    "main sidebar"
+}
+
+main {
+    grid-area: main;
+}
+
+div.sidebar {
+    grid-area: sidebar;
+}
+
+div.sidebar aside {
+    border: 1px dotted blue;
+}

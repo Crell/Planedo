@@ -44,6 +44,29 @@ class HtmlFeedTest extends WebTestCase
     /**
      * @test
      */
+    public function sidebar_displays(): void
+    {
+        $client = static::createClient();
+
+        $this->mockClock(new \DateTimeImmutable('2021-11-15'));
+        $this->mockFeedClient();
+        $this->populateFeeds();
+
+        $crawler = $client->request('GET', '/');
+
+        self::assertResponseIsSuccessful();
+
+        $container = self::getContainer();
+
+        self::assertSelectorTextSame('div.sidebar aside.most-active > h2', 'Popular feeds');
+
+        $feeds = $crawler->filter('div.sidebar aside.most-active > ul > li ');
+        self::assertCount(3, $feeds);
+    }
+
+    /**
+     * @test
+     */
     public function rejected_entries_dont_show(): void
     {
         $entryToExclude = 'https://www.example.com/blog/b';

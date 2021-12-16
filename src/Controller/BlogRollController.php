@@ -30,4 +30,14 @@ class BlogRollController extends AbstractController
         ]);
     }
 
+    // Route deliberately excluded. This is just for partial inclusion.
+    public function mostActive(int $max = 5): Response
+    {
+        $feeds = $this->repository->getMostActive($max);
+
+        return $this->render('blog_roll/_most_active.html.twig', [
+            'controller_name' => 'BlogRollController',
+            'feeds' => $feeds,
+        ]);
+    }
 }

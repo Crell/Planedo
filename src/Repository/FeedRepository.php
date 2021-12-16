@@ -35,6 +35,20 @@ class FeedRepository extends ServiceEntityRepository
             ;
     }
 
+    /**
+     * Gets the feeds with the most number of feed entries.
+     *
+     * @param int $limit
+     * @return Feed[]
+     */
+    public function getMostActive(int $limit): array
+    {
+        return $this->getEntityManager()
+            ->createQuery('SELECT f FROM App\\Entity\\Feed f ORDER BY SIZE(f.entries) DESC, f.title ASC')
+            ->setMaxResults($limit)
+            ->execute();
+    }
+
     // /**
     //  * @return Feed[] Returns an array of Feed objects
     //  */
