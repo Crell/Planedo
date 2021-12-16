@@ -35,6 +35,8 @@ class FeedCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
+        $actions->add(Crud::PAGE_EDIT, Action::DELETE);
+
         $updateFeed = Action::new('updateFeed', 'Update')
             ->displayAsLink()
             ->linkToCrudAction('updateFeed');
