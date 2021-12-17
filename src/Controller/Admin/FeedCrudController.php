@@ -74,6 +74,11 @@ class FeedCrudController extends AbstractCrudController
         /** @var Feed $feed */
         $feed = $context->getEntity()->getInstance();
 
+        if (!$feed->isActive()) {
+            $this->addFlash('warning', sprintf('Feed %s (%d) is inactive, so will not be updated.', $feed->getTitle(), $feed->getId()));
+            return $this->redirect($context->getReferrer());
+        }
+
         $bus->dispatch(new UpdateFeed($feed->getId()));
 
         $this->addFlash('notice', sprintf('Feed %s (%d) queued for updating', $feed->getTitle(), $feed->getId()));
