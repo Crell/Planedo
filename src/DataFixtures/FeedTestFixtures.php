@@ -20,6 +20,7 @@ class FeedTestFixtures extends Fixture implements FixtureGroupInterface
         $feed = new Feed();
         $feed
             ->setTitle('Fake Feed')
+            ->setActive(true)
             ->setFeedLink('http://www.example.com/');
         $manager->persist($feed);
 

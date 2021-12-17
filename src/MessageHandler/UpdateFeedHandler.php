@@ -44,6 +44,11 @@ final class UpdateFeedHandler implements MessageHandlerInterface
             return;
         }
 
+        // Do not update feeds that are not active/enabled.
+        if (!$feed->isActive()) {
+            return;
+        }
+
         try {
             $feedData = $this->reader->import($feed?->getFeedLink());
         } catch (\Laminas\Feed\Reader\Exception\RuntimeException $e) {

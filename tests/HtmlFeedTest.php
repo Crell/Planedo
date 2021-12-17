@@ -2,7 +2,9 @@
 
 namespace App\Tests;
 
+use App\Entity\Feed;
 use App\Entity\FeedEntry;
+use App\Message\UpdateFeed;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -101,4 +103,44 @@ class HtmlFeedTest extends WebTestCase
         self::assertCount(0, $link);
     }
 
+    /**
+     * @test
+     */
+    public function inactive_feeds_dont_show(): void
+    {
+        $entryToExclude = 'https://www.example.com/blog/b';
+
+        $excludedContent = 'Description B';
+
+        $client = static::createClient();
+
+        $this->mockClock(new \DateTimeImmutable('02 Dec 2021 01:01:01 +0000'));
+        $this->mockFeedClient();
+        $this->populateFeeds();
+
+        $container = self::getContainer();
+
+        // Disable one feed, even though its data has been fetched.
+
+        /** @var EntityManagerInterface $em */
+        $em = $container->get(EntityManagerInterface::class);
+
+        /** @var Feed[] $feeds */
+        $feeds = $em->getRepository(Feed::class)->findAll();
+        foreach ($feeds as $f) {
+            if ($f->getFeedLink() === 'https://www.garfieldtech.com/blog/feed') {
+                $f->setActive(false);
+                $em->persist($f);
+            }
+        }
+        $em->flush();
+
+        $crawler = $client->request('GET', '/');
+        self::assertResponseIsSuccessful();
+
+        // Confirm that the disabled feed doesn't show.
+        // @todo I'm pretty sure this is a stupid way of checking this.
+        $response = $client->getResponse();
+        self::assertStringNotContainsString('garfieldtech', $response->getContent());
+    }
 }

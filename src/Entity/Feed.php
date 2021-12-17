@@ -32,6 +32,9 @@ class Feed
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $lastUpdated;
 
+    #[ORM\Column(type: 'boolean')]
+    private $active = false;
+
     #[ORM\OneToMany(
         mappedBy: 'feed',
         targetEntity: FeedEntry::class,
@@ -65,7 +68,6 @@ class Feed
 
     #[ORM\Column(type: 'string', length: 6)]
     private string $language = '';
-
 
     public function __construct()
     {
@@ -237,6 +239,18 @@ class Feed
     public function setFeedLink(?string $feedLink): self
     {
         $this->feedLink = $feedLink;
+
+        return $this;
+    }
+
+    public function isActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): self
+    {
+        $this->active = $active;
 
         return $this;
     }

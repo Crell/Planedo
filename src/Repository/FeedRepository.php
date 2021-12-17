@@ -44,7 +44,9 @@ class FeedRepository extends ServiceEntityRepository
     public function getMostActive(int $limit): array
     {
         return $this->getEntityManager()
-            ->createQuery('SELECT f FROM App\\Entity\\Feed f ORDER BY SIZE(f.entries) DESC, f.title ASC')
+            ->createQuery('SELECT f FROM App\\Entity\\Feed f
+                WHERE f.active = true 
+                ORDER BY SIZE(f.entries) DESC, f.title ASC')
             ->setMaxResults($limit)
             ->execute();
     }

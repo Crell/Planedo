@@ -10,6 +10,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\BatchActionDto;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -29,6 +30,7 @@ class FeedCrudController extends AbstractCrudController
             IdField::new('id')->onlyWhenUpdating()->setDisabled(),
             TextField::new('title'),
             TextField::new('feedLink', 'Feed URL'),
+            BooleanField::new('active', 'Active'),
             DateTimeField::new('lastUpdated')->hideWhenCreating()->setDisabled(),
         ];
     }
