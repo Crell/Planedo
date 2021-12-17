@@ -42,8 +42,8 @@ class FeedEntryCrudController extends AbstractCrudController
             TextField::new('title')->setDisabled(),
             TextField::new('link')->setDisabled(),
             DateTimeField::new('dateModified', 'Date')->setDisabled(),
-            // @todo This contains HTML, so figure out how to format nicely.
             BooleanField::new('approved', 'Approved')->setDisabled(),
+            // @todo This contains HTML, so figure out how to format nicely.
             TextField::new('summary')->setDisabled()->onlyOnDetail(),
             TextField::new('feed.title', 'Feed')->setDisabled()->onlyOnIndex(),
 //            AssociationField::new('feed')->setDisabled()->onlyOnIndex(),
