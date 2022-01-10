@@ -65,7 +65,15 @@ class FeedEntry
 
     public function getDescription(): ?string
     {
-        return $this->description;
+        // If there is already a title link to the article, strip it out.
+        // Linking to the article and showing its title is the responsibility
+        // of the template, not the body.
+        $link = preg_quote($this->getLink(), '%');
+        $title = preg_quote($this->getTitle(), '%');
+        $regex = "%<a[^<>]*href=\"?{$link}\"?.*{$title}.*</a>%isU";
+        $description = preg_replace($regex, '', $this->description);
+
+        return $description;
     }
 
     public function setDescription(string $description): self
