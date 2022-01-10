@@ -6,7 +6,7 @@
 
     {% if entries|length > 0 %}
         {% for entry in entries  %}
-            {{ include('html_feed/entry.html.twig', {entry: entry}) }}
+            {{ include('html_feed/_entry.html.twig', {entry: entry}) }}
         {% endfor %}
 
         <div>
