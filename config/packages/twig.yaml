@@ -1,5 +1,7 @@
 twig:
     default_path: '%kernel.project_dir%/templates'
+    date:
+        format: j F Y @ H:i
 
 when@test:
     twig:
