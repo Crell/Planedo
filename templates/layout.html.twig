@@ -13,6 +13,8 @@
             {{ render(controller(
                 'App\\Controller\\BlogRollController::mostActive', {max: 3}
             )) }}
+
+            {{ include('_feeds.html.twig') }}
         </div>
     </div>
 {% endblock %}
