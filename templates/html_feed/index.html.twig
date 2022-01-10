@@ -6,10 +6,7 @@
 
     {% if entries|length > 0 %}
         {% for entry in entries  %}
-            <article>
-                <h2><a href="{{ entry.link }}">{{ entry.title }}</a></h2>
-                {{ entry.description | raw }}
-            </article>
+            {{ include('html_feed/entry.html.twig', {entry: entry}) }}
         {% endfor %}
 
         <div>
