@@ -33,7 +33,7 @@ services:
     # please note that last definitions always *replace* previous ones
 
     Laminas\Feed\Reader\Http\ClientInterface:
-        alias: App\GuzzleClient
+        alias: App\FeedReaderClient
 
     Psr\Clock\ClockInterface:
         class: Navarr\WallClock\WallClock

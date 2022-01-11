@@ -124,15 +124,6 @@
     "friendsofphp/proxy-manager-lts": {
         "version": "v1.0.5"
     },
-    "guzzlehttp/guzzle": {
-        "version": "7.4.0"
-    },
-    "guzzlehttp/promises": {
-        "version": "1.5.1"
-    },
-    "guzzlehttp/psr7": {
-        "version": "2.1.0"
-    },
     "laminas/laminas-code": {
         "version": "4.4.3"
     },
@@ -157,11 +148,26 @@
     "nikic/php-parser": {
         "version": "v4.13.1"
     },
+    "nyholm/psr7": {
+        "version": "1.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "0cd4d2d0e7f646fda75f9944f747a56e6ed13d4c"
+        },
+        "files": [
+            "config/packages/nyholm_psr7.yaml"
+        ]
+    },
     "phar-io/manifest": {
         "version": "2.0.3"
     },
     "phar-io/version": {
         "version": "3.1.0"
+    },
+    "php-http/message-factory": {
+        "version": "v1.0.2"
     },
     "phpdocumentor/reflection-common": {
         "version": "2.2.0"
@@ -230,9 +236,6 @@
     },
     "psr/log": {
         "version": "2.0.0"
-    },
-    "ralouphie/getallheaders": {
-        "version": "3.0.3"
     },
     "roave/security-advisories": {
         "version": "dev-latest"

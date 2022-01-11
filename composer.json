@@ -19,9 +19,12 @@
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.10",
         "easycorp/easyadmin-bundle": "^4.0",
-        "guzzlehttp/guzzle": "^7.4",
         "laminas/laminas-feed": "^2.15",
+        "navarr/wall-clock": "@dev",
+        "nyholm/psr7": "^1.4",
         "phpdocumentor/reflection-docblock": "^5.3",
+        "psr/clock": "@dev",
+        "psr/http-client": "^1.0",
         "sensio/framework-extra-bundle": "^6.1",
         "symfony/asset": "5.4.*",
         "symfony/console": "5.4.*",
@@ -51,9 +54,7 @@
         "symfony/web-link": "5.4.*",
         "symfony/yaml": "5.4.*",
         "twig/extra-bundle": "^2.12|^3.0",
-        "twig/twig": "^2.12|^3.0",
-        "psr/clock": "@dev",
-        "navarr/wall-clock": "@dev"
+        "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {
         "dama/doctrine-test-bundle": "^6.7",

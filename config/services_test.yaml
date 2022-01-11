@@ -8,7 +8,7 @@ parameters:
     app.feeds.purge-before: -10 days
 services:
     Laminas\Feed\Reader\Http\ClientInterface:
-        alias: App\GuzzleClient
+        alias: App\FeedReaderClient
         public: true
 
     Psr\Clock\ClockInterface:
