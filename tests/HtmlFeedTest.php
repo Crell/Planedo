@@ -47,7 +47,7 @@ class HtmlFeedTest extends WebTestCase
     /**
      * @test
      */
-    public function sidebar_displays(): void
+    public function sidebars_display(): void
     {
         $client = static::createClient();
 
@@ -63,6 +63,7 @@ class HtmlFeedTest extends WebTestCase
         $container = self::getContainer();
 
         self::assertSelectorTextSame('div.sidebar aside.most-active > h2', 'Popular feeds');
+        self::assertSelectorTextSame('div.sidebar aside.feed-links > h2', 'Feeds');
 
         $feeds = $crawler->filter('div.sidebar aside.most-active > ul > li ');
         self::assertCount(3, $feeds);
