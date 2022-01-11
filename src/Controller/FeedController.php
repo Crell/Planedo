@@ -19,7 +19,7 @@ class FeedController extends AbstractController
     ) {}
 
     #[Route('/atom', name: 'atom_main')]
-    public function atomFeed(Request $request): Response
+    public function atomFeed(Request $request, bool $plainTextFeeds = false): Response
     {
         $offset = max(0, $request->query->getInt('offset', 0));
 
@@ -27,13 +27,12 @@ class FeedController extends AbstractController
             offset: $offset,
             selfRoute: 'atom_main',
             feedType: 'atom',
-            contentType: 'text/plain',
-        //contentType: 'application/atom+xml',
+            contentType: $plainTextFeeds ? 'text/plain' : 'application/atom+xml',
         );
     }
 
     #[Route('/rss', name: 'rss_main')]
-    public function rssFeed(Request $request): Response
+    public function rssFeed(Request $request, bool $plainTextFeeds = false): Response
     {
         $offset = max(0, $request->query->getInt('offset', 0));
 
@@ -41,14 +40,12 @@ class FeedController extends AbstractController
             offset: $offset,
             selfRoute: 'rss_main',
             feedType: 'rss',
-            contentType: 'text/plain',
-            //contentType: 'application/rss+xml',
+            contentType: $plainTextFeeds ? 'text/plain' : 'application/rss+xml',
         );
     }
 
     protected function makeFeed(int $offset, string $selfRoute, string $feedType, string $contentType): Response
     {
-        //$offset = max(0, $request->query->getInt('offset', 0));
         $paginator = $this->repository->latestEntriesPaginator($offset);
 
         $selfLink = $this->generateUrl($selfRoute, referenceType: UrlGeneratorInterface::ABSOLUTE_URL);
@@ -59,7 +56,7 @@ class FeedController extends AbstractController
         $feed->setId($selfLink);
         $feed->setDescription('Description goes here.');
         $feed->setFeedLink($selfLink, $feedType);
-        $feed->setLink($selfLink, $feedType);
+        $feed->setLink($selfLink);
         // @todo Unclear how to set next/prev links on feeds.
 
         foreach ($paginator as $record) {
@@ -71,7 +68,6 @@ class FeedController extends AbstractController
         return new Response(
             content: $out,
             headers: [
-//                'content-type' => 'application/atom+xml'
                 'content-type' => $contentType
             ]
         );

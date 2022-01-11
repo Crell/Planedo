@@ -6,6 +6,7 @@
 parameters:
     app.feeds.items-per-page: 10
     app.feeds.purge-before: -30 days
+    app.feeds.use-plain-text: false
 
 services:
     # default configuration for services in *this* file
@@ -16,6 +17,7 @@ services:
         bind:
             $itemsPerPage: '%app.feeds.items-per-page%'
             $purgeBefore: '%app.feeds.purge-before%'
+            $plainTextFeeds: '%app.feeds.use-plain-text%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
