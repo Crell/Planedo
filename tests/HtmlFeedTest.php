@@ -26,6 +26,7 @@ class HtmlFeedTest extends WebTestCase
         $crawler = $client->request('GET', '/');
 
         self::assertResponseIsSuccessful();
+        self::assertResponseHeaderSame('content-type', 'text/html; charset=UTF-8');
 
         $container = self::getContainer();
 
@@ -57,6 +58,7 @@ class HtmlFeedTest extends WebTestCase
         $crawler = $client->request('GET', '/');
 
         self::assertResponseIsSuccessful();
+        self::assertResponseHeaderSame('content-type', 'text/html; charset=UTF-8');
 
         $container = self::getContainer();
 
@@ -94,6 +96,7 @@ class HtmlFeedTest extends WebTestCase
 
         $crawler = $client->request('GET', '/');
         self::assertResponseIsSuccessful();
+        self::assertResponseHeaderSame('content-type', 'text/html; charset=UTF-8');
 
         // Confirm that the rejected entry is not here.
         // @todo I'm pretty sure this is a stupid way of checking this.
@@ -137,6 +140,7 @@ class HtmlFeedTest extends WebTestCase
 
         $crawler = $client->request('GET', '/');
         self::assertResponseIsSuccessful();
+        self::assertResponseHeaderSame('content-type', 'text/html; charset=UTF-8');
 
         // Confirm that the disabled feed doesn't show.
         // @todo I'm pretty sure this is a stupid way of checking this.
