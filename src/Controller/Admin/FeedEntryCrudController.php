@@ -3,8 +3,8 @@
 namespace App\Controller\Admin;
 
 use App\Entity\FeedEntry;
-use App\Message\RejectEntry;
-use App\Message\ApproveEntry;
+use App\Message\RejectEntries;
+use App\Message\ApproveEntries;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -94,9 +94,7 @@ class FeedEntryCrudController extends AbstractCrudController
     public function batchRejectEntries(BatchActionDto $context, MessageBusInterface $bus): Response
     {
         $ids = $context->getEntityIds();
-        foreach ($ids as $id) {
-            $bus->dispatch(new RejectEntry($id));
-        }
+        $bus->dispatch(new RejectEntries(...$ids));
 
         $this->addFlash('notice', sprintf('%d entries rejected.', count($ids)));
 
@@ -108,7 +106,7 @@ class FeedEntryCrudController extends AbstractCrudController
         /** @var FeedEntry $entry */
         $entry = $context->getEntity()->getInstance();
 
-        $bus->dispatch(new RejectEntry($entry->getId()));
+        $bus->dispatch(new RejectEntries($entry->getId()));
 
         $this->addFlash('notice', sprintf('Rejected entry: %s', $entry->getTitle()));
 
@@ -119,7 +117,7 @@ class FeedEntryCrudController extends AbstractCrudController
     {
         $ids = $context->getEntityIds();
         foreach ($ids as $id) {
-            $bus->dispatch(new ApproveEntry($id));
+            $bus->dispatch(new ApproveEntries($id));
         }
 
         $this->addFlash('notice', sprintf('%d entries approved.', count($ids)));
@@ -132,7 +130,7 @@ class FeedEntryCrudController extends AbstractCrudController
         /** @var FeedEntry $entry */
         $entry = $context->getEntity()->getInstance();
 
-        $bus->dispatch(new ApproveEntry($entry->getId()));
+        $bus->dispatch(new ApproveEntries($entry->getId()));
 
         $this->addFlash('notice', sprintf('Approved entry: %s', $entry->getTitle()));
 

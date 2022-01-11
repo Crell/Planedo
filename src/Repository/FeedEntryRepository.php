@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\FeedEntry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -37,12 +38,54 @@ class FeedEntryRepository extends ServiceEntityRepository
         return new Paginator($query);
     }
 
-    public function deleteOlderThan(\DateTimeImmutable $threshold)
+    /**
+     * Purge feed entries older than a certain timestamp.
+     *
+     * @param \DateTimeImmutable $threshold
+     *   The date older than which entries should be purged.
+     */
+    public function deleteOlderThan(\DateTimeImmutable $threshold): void
     {
         $this->_em->createQueryBuilder()
             ->delete(FeedEntry::class, 'e')
             ->where('e.dateModified < :threshold')
             ->setParameter('threshold', $threshold)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Marks multiple entries as approved, so they show in feeds.
+     *
+     * @param string ...$ids
+     *   A list of the IDs (links) to approve.
+     */
+    public function approve(string ...$ids): void
+    {
+        $this->_em->createQueryBuilder()
+            ->update(FeedEntry::class, 'e')
+            ->set('e.approved', ':approved')
+            ->where('e.link IN (:ids)')
+            ->setParameter('approved', true)
+            ->setParameter('ids', $ids, Connection::PARAM_STR_ARRAY)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Marks multiple entries as not approved, so they do not show in feeds.
+     *
+     * @param string ...$ids
+     *   A list of the IDs (links) to reject.
+     */
+    public function reject(string ...$ids): void
+    {
+        $this->_em->createQueryBuilder()
+            ->update(FeedEntry::class, 'e')
+            ->set('e.approved', ':approved')
+            ->where('e.link IN (:ids)')
+            ->setParameter('approved', false)
+            ->setParameter('ids', $ids, Connection::PARAM_STR_ARRAY)
             ->getQuery()
             ->getResult();
     }
