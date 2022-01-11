@@ -9,6 +9,7 @@ use App\Message\UpdateFeed;
 use App\Repository\FeedEntryRepository;
 use App\Repository\FeedRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use GuzzleHttp\Exception\ServerException;
 use Laminas\Feed\Reader\Collection\Author;
 use Laminas\Feed\Reader\Entry\EntryInterface;
 use Laminas\Feed\Reader\Feed\FeedInterface;
@@ -51,7 +52,7 @@ final class UpdateFeedHandler implements MessageHandlerInterface
 
         try {
             $feedData = $this->reader->import($feed?->getFeedLink());
-        } catch (\Laminas\Feed\Reader\Exception\RuntimeException $e) {
+        } catch (\Laminas\Feed\Reader\Exception\RuntimeException|ServerException $e) {
             $this->logger->error('Exception caught importing feed {name}', [
                 'name' => $feed->getTitle(),
                 'exception' => $e,
