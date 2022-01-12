@@ -2,6 +2,6 @@ name: planedo
 recipe: symfony
 config:
   webroot: public
-  php: '8.0'
+  php: '8.1'
   xdebug: "debug,develop"
   database: postgres:13

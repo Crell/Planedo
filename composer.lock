@@ -2046,16 +2046,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/navarr/wall-clock.git",
-                "reference": "8337fd6c446d9ee64d7de89ec24795d11c0f6382"
+                "reference": "96ac5afa3ecfb467918e8d46905434ee96c29f4e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/navarr/wall-clock/zipball/8337fd6c446d9ee64d7de89ec24795d11c0f6382",
-                "reference": "8337fd6c446d9ee64d7de89ec24795d11c0f6382",
+                "url": "https://api.github.com/repos/navarr/wall-clock/zipball/96ac5afa3ecfb467918e8d46905434ee96c29f4e",
+                "reference": "96ac5afa3ecfb467918e8d46905434ee96c29f4e",
                 "shasum": ""
             },
             "require": {
-                "php": "~8.0.0",
+                "php": "^8",
                 "psr/clock": "@dev"
             },
             "provide": {
@@ -2102,7 +2102,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-01-11T02:13:29+00:00"
+            "time": "2022-01-12T22:33:18+00:00"
         },
         {
             "name": "nyholm/psr7",
