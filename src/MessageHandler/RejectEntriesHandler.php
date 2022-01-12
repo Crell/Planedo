@@ -16,10 +16,7 @@ final class RejectEntriesHandler implements MessageHandlerInterface
 
     public function __construct(
         private EntityManagerInterface $em,
-        private ?LoggerInterface $logger = null,
     ) {
-        $this->logger ??= new NullLogger();
-
         $this->entryRepo = $this->em->getRepository(FeedEntry::class);
     }
 

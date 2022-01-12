@@ -19,10 +19,8 @@ final class PurgeOldEntriesHandler implements MessageHandlerInterface
         private EntityManagerInterface $em,
         private ClockInterface $clock,
         protected string $purgeBefore,
-        private ?LoggerInterface $logger = null,
+        private ?LoggerInterface $logger = new NullLogger(),
     ) {
-        $this->logger ??= new NullLogger();
-
         $this->entryRepo = $this->em->getRepository(FeedEntry::class);
     }
 

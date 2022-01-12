@@ -27,10 +27,8 @@ final class UpdateFeedHandler implements MessageHandlerInterface
         private FeedReader $reader,
         private ClockInterface $clock,
         private string $purgeBefore,
-        private ?LoggerInterface $logger = null,
+        private LoggerInterface $logger = new NullLogger(),
     ) {
-        $this->logger ??= new NullLogger();
-
         $this->feedRepo = $this->em->getRepository(Feed::class);
         $this->entryRepo = $this->em->getRepository(FeedEntry::class);
     }
