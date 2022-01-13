@@ -1,12 +1,20 @@
 {
     "type": "project",
-    "license": "proprietary",
+    "license": "AGPL-3.0-or-later",
     "minimum-stability": "stable",
     "prefer-stable": true,
     "repositories": [
         {
             "type": "git",
             "url": "https://github.com/php-fig/clock.git"
+        }
+    ],
+    "authors": [
+        {
+            "name": "Larry Garfield",
+            "email": "larry@garfieldtech.com",
+            "homepage": "https://www.garfieldtech.com",
+            "role": "Lead Developer"
         }
     ],
     "require": {
