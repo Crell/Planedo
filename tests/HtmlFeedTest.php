@@ -2,15 +2,15 @@
 
 namespace App\Tests;
 
-use App\Entity\Feed;
-use App\Entity\FeedEntry;
-use App\Message\UpdateFeed;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
+/**
+ * @group public
+ */
 class HtmlFeedTest extends WebTestCase
 {
     use SetupUtils;
+    use EntityManagerWrapper;
 
     /**
      * @test
@@ -84,13 +84,9 @@ class HtmlFeedTest extends WebTestCase
         $this->mockFeedClient();
         $this->populateFeeds();
 
-        $container = self::getContainer();
+        $em = $this->entityManager();
 
-        /** @var EntityManagerInterface $em */
-        $em = $container->get(EntityManagerInterface::class);
-
-        /** @var FeedEntry $entry */
-        $entry = $em->getRepository(FeedEntry::class)->find($entryToExclude);
+        $entry = $this->feedEntryRepo()->find($entryToExclude);
         $entry->setApproved(false);
         $em->persist($entry);
         $em->flush();
@@ -122,15 +118,12 @@ class HtmlFeedTest extends WebTestCase
         $this->mockFeedClient();
         $this->populateFeeds();
 
-        $container = self::getContainer();
 
         // Disable one feed, even though its data has been fetched.
 
-        /** @var EntityManagerInterface $em */
-        $em = $container->get(EntityManagerInterface::class);
+        $em = $this->entityManager();
 
-        /** @var Feed[] $feeds */
-        $feeds = $em->getRepository(Feed::class)->findAll();
+        $feeds = $this->feedRepo()->findAll();
         foreach ($feeds as $f) {
             if ($f->getFeedLink() === 'https://www.garfieldtech.com/blog/feed') {
                 $f->setActive(false);

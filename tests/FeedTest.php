@@ -9,9 +9,13 @@ use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Feed\Reader\Reader;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
+/**
+ * @group public
+ */
 class FeedTest extends WebTestCase
 {
     use SetupUtils;
+    use EntityManagerWrapper;
 
     public function feedTypeProvider(): iterable
     {
@@ -68,13 +72,10 @@ class FeedTest extends WebTestCase
         $this->mockFeedClient();
         $this->populateFeeds();
 
-        $container = self::getContainer();
-
-        /** @var EntityManagerInterface $em */
-        $em = $container->get(EntityManagerInterface::class);
+        $em = $this->entityManager();
 
         /** @var FeedEntry $entry */
-        $entry = $em->getRepository(FeedEntry::class)->find($entryToExclude);
+        $entry = $this->feedEntryRepo()->find($entryToExclude);
         $entry->setApproved(false);
         $em->persist($entry);
         $em->flush();
@@ -102,15 +103,10 @@ class FeedTest extends WebTestCase
         $this->mockFeedClient();
         $this->populateFeeds();
 
-        $container = self::getContainer();
-
         // Disable one feed, even though its data has been fetched.
+        $em = $this->entityManager();
 
-        /** @var EntityManagerInterface $em */
-        $em = $container->get(EntityManagerInterface::class);
-
-        /** @var Feed[] $feeds */
-        $feeds = $em->getRepository(Feed::class)->findAll();
+        $feeds = $this->feedRepo()->findAll();
         foreach ($feeds as $f) {
             if ($f->getFeedLink() === 'https://www.garfieldtech.com/blog/feed') {
                 $f->setActive(false);
