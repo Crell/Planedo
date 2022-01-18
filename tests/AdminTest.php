@@ -6,9 +6,34 @@ namespace App\Tests;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
+/**
+ * @group admin
+ */
 class AdminTest extends WebTestCase
 {
     use SetupUtils;
+    use UserUtils;
+
+    /**
+     * @test
+     */
+    public function anon_user_gets_login_form_on_admin(): void
+    {
+        $client = static::createClient();
+
+        // Don't login.
+
+        $client->request('GET', '/admin');
+        $crawler = $client->followRedirect();
+
+        self::assertResponseIsSuccessful();
+
+        $form = $crawler->filter('form[action="/login"]');
+
+        self::assertEquals('Login', $crawler->filter('title')->text());
+
+        self::assertCount(1, $form);
+    }
 
     /**
      * @test
@@ -21,12 +46,17 @@ class AdminTest extends WebTestCase
         $this->mockFeedClient();
         $this->populateFeeds();
 
-        $crawler = $client->request('GET', '/admin');
+        // Login.
+        $adminUser = $this->createUser('me@me.com', 'asdf');
+        $client->loginUser($adminUser);
+
+        $client->request('GET', '/admin');
         $client->followRedirect();
 
-        $client->clickLink('Feeds');
+        $crawler = $client->clickLink('Feeds');
 
         self::assertResponseIsSuccessful();
+        self::assertEquals('Feed', $crawler->filter('title')->text());
     }
 
     /**
@@ -40,11 +70,16 @@ class AdminTest extends WebTestCase
         $this->mockFeedClient();
         $this->populateFeeds();
 
-        $crawler = $client->request('GET', '/admin');
+        // Login.
+        $adminUser = $this->createUser('me@me.com', 'asdf');
+        $client->loginUser($adminUser);
+
+        $client->request('GET', '/admin');
         $client->followRedirect();
 
-        $client->clickLink('Feed Entries');
+        $crawler = $client->clickLink('Feed Entries');
 
         self::assertResponseIsSuccessful();
+        self::assertEquals('Feed entries', $crawler->filter('title')->text());
     }
 }
