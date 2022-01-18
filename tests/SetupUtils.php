@@ -10,19 +10,17 @@ use App\Message\UpdateFeed;
 use App\Repository\FeedEntryRepository;
 use App\Tests\Mocks\MockFeedReaderHttpClient;
 use App\Tests\Mocks\SettableClock;
-use Doctrine\ORM\EntityManagerInterface;
 use Laminas\Feed\Reader\Http\ClientInterface;
 use Psr\Clock\ClockInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 trait SetupUtils
 {
+    use EntityManagerWrapper;
+
     protected function assertRawEntryCount(int $expected): void
     {
-        $container = self::getContainer();
-
-        /** @var EntityManagerInterface $em */
-        $em = $container->get(EntityManagerInterface::class);
+        $em = $this->entityManager();
 
         /** @var FeedEntryRepository $entryRepo */
         $entryRepo = $em->getRepository(FeedEntry::class);
@@ -60,8 +58,7 @@ trait SetupUtils
         /** @var MessageBusInterface $bus */
         $bus = $container->get(MessageBusInterface::class);
 
-        /** @var EntityManagerInterface $em */
-        $em = $container->get(EntityManagerInterface::class);
+        $em = $this->entityManager();
 
         /** @var Feed[] $feeds */
         $feeds = $em->getRepository(Feed::class)->findAll();
