@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Command;
 
-use App\Entity\User;
-use App\Repository\UserRepository;
 use App\Tests\EntityManagerWrapper;
+use App\Tests\HasherWrapper;
 use App\Tests\UserUtils;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * @group cli
@@ -21,27 +19,8 @@ class UpdateUserCommandTest extends KernelTestCase
 
     use EntityManagerWrapper;
     use UserUtils;
-
-    /**
-     * Convenience wrapper to execute this test's command.
-     *
-     * @param Application $application
-     * @param array $args
-     * @param bool $expectPass
-     * @return CommandTester
-     */
-    protected function executeCommand(Application $application, array $args, bool $expectPass = true): CommandTester
-    {
-        $command = $application->find(self::Command);
-        $commandTester = new CommandTester($command);
-        $commandTester->execute($args);
-
-        if ($expectPass) {
-            $commandTester->assertCommandIsSuccessful();
-        }
-
-        return $commandTester;
-    }
+    use HasherWrapper;
+    use CommandUtils;
 
     /**
      * @test
@@ -63,11 +42,42 @@ class UpdateUserCommandTest extends KernelTestCase
         $output = $tester->getDisplay();
         $this->assertStringContainsString('User updated', $output);
 
-        /** @var UserRepository $userRepo */
-        $userRepo = $this->entityManager()->getRepository(User::class);
-        $foundUser = $userRepo->findOneByEmail('you@me.com');
+        $foundUser = $this->userRepo()->findOneByEmail('you@me.com');
 
         self::assertEquals('you@me.com', $foundUser->getEmail());
+    }
+
+    /**
+     * @test
+     */
+    public function change_password(): void
+    {
+        $newPassword = 'qwer';
+
+        $kernel = self::bootKernel();
+        $application = new Application($kernel);
+
+        $this->createUser('me@me.com', 'asdf');
+
+        $tester = $this->executeCommand($application,
+            args: [
+                'email' => 'me@me.com',
+                '--password' => true,
+            ],
+            inputs: [$newPassword, $newPassword],
+        );
+
+        // The output of the command in the console.
+        $output = $tester->getDisplay();
+        $this->assertStringContainsString('User updated', $output);
+
+        $foundUser = $this->userRepo()->findOneByEmail('me@me.com');
+
+        $this->markTestIncomplete('Testing the password hash is not working yet.');
+
+        $expectedHash = $this->hasher()->hashPassword($foundUser, $newPassword);
+
+        self::assertEquals($expectedHash, $foundUser->getPassword());
     }
 
 }
