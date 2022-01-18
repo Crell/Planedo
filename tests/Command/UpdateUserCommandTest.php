@@ -7,7 +7,7 @@ namespace App\Tests\Command;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Tests\EntityManagerWrapper;
-use App\Tests\HasherWrapper;
+use App\Tests\UserUtils;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -20,26 +20,14 @@ class UpdateUserCommandTest extends KernelTestCase
     protected const Command = 'app:update-user';
 
     use EntityManagerWrapper;
-    use HasherWrapper;
-
-    protected function createUser(string $email, string $password): User
-    {
-        $em = $this->entityManager();
-
-        $user = User::create($email);
-
-        $user->setPassword($this->hasher()->hashPassword($user, $password));
-        $em->persist($user);
-        $em->flush();
-
-        return $user;
-    }
+    use UserUtils;
 
     /**
      * Convenience wrapper to execute this test's command.
      *
      * @param Application $application
      * @param array $args
+     * @param bool $expectPass
      * @return CommandTester
      */
     protected function executeCommand(Application $application, array $args, bool $expectPass = true): CommandTester
