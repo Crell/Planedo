@@ -46,9 +46,9 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToDashboard('Dashboard', 'fa fa-home'),
 
             MenuItem::section('Feeds'),
-            MenuItem::linkToCrud('Feeds', 'fa fa-tags', Feed::class)
+            MenuItem::linkToCrud('Feeds', 'fa fa-list', Feed::class)
                 ->setBadge($this->feedRepo->getActiveFeedCount()),
-            MenuItem::linkToCrud('Feed Entries', 'fa fa-file-text', FeedEntry::class)
+            MenuItem::linkToCrud('Feed Entries', 'fa fa-indent', FeedEntry::class)
                 ->setBadge($this->entryRepo->getApprovedEntryCount()),
 
             MenuItem::section('Users'),
