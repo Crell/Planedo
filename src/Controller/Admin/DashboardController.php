@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Feed;
 use App\Entity\FeedEntry;
+use App\Entity\User;
 use App\Repository\FeedEntryRepository;
 use App\Repository\FeedRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -50,11 +51,9 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Feed Entries', 'fa fa-file-text', FeedEntry::class)
                 ->setBadge($this->entryRepo->getApprovedEntryCount()),
 
-            /*
             MenuItem::section('Users'),
-            MenuItem::linkToCrud('Comments', 'fa fa-comment', Comment::class),
+//            MenuItem::linkToCrud('Comments', 'fa fa-comment', Comment::class),
             MenuItem::linkToCrud('Users', 'fa fa-user', User::class),
-            */
         ];
     }
 }
