@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Feed;
+use App\Entity\FeedEntry;
 use App\Message\UpdateFeed;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
@@ -22,6 +23,16 @@ class FeedCrudController extends AbstractCrudController
     public static function getEntityFqcn(): string
     {
         return Feed::class;
+    }
+
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->setEntityLabelInSingular('Feed')
+            ->setEntityLabelInPlural('Feeds')
+            ->setPaginatorPageSize(50)
+            ->setDefaultSort(['title' => 'ASC'])
+            ;
     }
 
     public function configureFields(string $pageName): iterable
