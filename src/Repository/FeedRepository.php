@@ -51,6 +51,11 @@ class FeedRepository extends ServiceEntityRepository
             ->execute();
     }
 
+    public function getActiveFeedCount(): int
+    {
+        return $this->count(['active' => 'true']);
+    }
+
     // /**
     //  * @return Feed[] Returns an array of Feed objects
     //  */

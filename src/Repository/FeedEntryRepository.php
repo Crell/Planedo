@@ -90,6 +90,11 @@ class FeedEntryRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function getApprovedEntryCount(): int
+    {
+        return $this->count(['approved' => 'true']);
+    }
+
     // /**
     //  * @return FeedEntry[] Returns an array of FeedEntry objects
     //  */

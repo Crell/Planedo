@@ -4,6 +4,9 @@ namespace App\Controller\Admin;
 
 use App\Entity\Feed;
 use App\Entity\FeedEntry;
+use App\Repository\FeedEntryRepository;
+use App\Repository\FeedRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -13,9 +16,16 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DashboardController extends AbstractDashboardController
 {
+    protected readonly FeedRepository $feedRepo;
+    protected readonly FeedEntryRepository $entryRepo;
+
     public function __construct(
-        protected AdminUrlGenerator $routeBuilder,
-    ) {}
+        protected readonly AdminUrlGenerator $routeBuilder,
+        EntityManagerInterface $em,
+    ) {
+        $this->feedRepo = $em->getRepository(Feed::class);
+        $this->entryRepo = $em->getRepository(FeedEntry::class);
+    }
 
     #[Route('/admin', name: 'admin')]
     public function index(): Response
@@ -35,8 +45,10 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToDashboard('Dashboard', 'fa fa-home'),
 
             MenuItem::section('Feeds'),
-            MenuItem::linkToCrud('Feeds', 'fa fa-tags', Feed::class),
-            MenuItem::linkToCrud('Feed Entries', 'fa fa-file-text', FeedEntry::class),
+            MenuItem::linkToCrud('Feeds', 'fa fa-tags', Feed::class)
+                ->setBadge($this->feedRepo->getActiveFeedCount()),
+            MenuItem::linkToCrud('Feed Entries', 'fa fa-file-text', FeedEntry::class)
+                ->setBadge($this->entryRepo->getApprovedEntryCount()),
 
             /*
             MenuItem::section('Users'),
