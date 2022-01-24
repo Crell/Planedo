@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "99343634fc17329ab292c03691dd6cc5",
+    "content-hash": "8bbfa4977152aede4f905ff8d279d413",
     "packages": [
         {
             "name": "composer/package-versions-deprecated",
@@ -78,6 +78,45 @@
                 }
             ],
             "time": "2021-09-13T08:41:34+00:00"
+        },
+        {
+            "name": "crell/planedo-bundle",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Crell/PlanedoBundle.git",
+                "reference": "70e77546d1a2c60408e80c4ee273c3d653893f56"
+            },
+            "require": {
+                "php": "~8.1"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^1.0",
+                "phpunit/phpunit": "^9.5"
+            },
+            "default-branch": true,
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Crell\\Bundle\\Planedo\\": "src"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Crell\\Bundle\\Planedo\\Tests\\": "tests",
+                    "Crell\\Bundle\\Planedo\\Benchmarks\\": "benchmarks"
+                }
+            },
+            "license": [
+                "AGPL-3.0-or-later"
+            ],
+            "description": "Feed aggregator bundle for Symfony 6 and later.",
+            "time": "2022-01-24T19:04:08+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -11297,6 +11336,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "crell/planedo-bundle": 20,
         "navarr/wall-clock": 20,
         "psr/clock": 20,
         "roave/security-advisories": 20
