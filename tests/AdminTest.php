@@ -28,9 +28,9 @@ class AdminTest extends WebTestCase
 
         self::assertResponseIsSuccessful();
 
-        $form = $crawler->filter('form[action="/login"]');
+        $form = $crawler->filter('form[action=""]');
 
-        self::assertEquals('Login', $crawler->filter('title')->text());
+        self::assertEquals('Planedo login', $crawler->filter('title')->text());
 
         self::assertCount(1, $form);
     }
@@ -56,7 +56,7 @@ class AdminTest extends WebTestCase
         $crawler = $client->clickLink('Feeds');
 
         self::assertResponseIsSuccessful();
-        self::assertEquals('Feed', $crawler->filter('title')->text());
+        self::assertEquals('Feeds', $crawler->filter('title')->text());
     }
 
     /**

@@ -28,7 +28,7 @@ class LoginController extends AbstractController
             // the same domain as the rest of the Dashboard)
             'translation_domain' => 'admin',
 
-            'page_title' => 'Plando login',
+            'page_title' => 'Planedo login',
 
             // the string used to generate the CSRF token. If you don't define
             // this parameter, the login form won't include a CSRF token
