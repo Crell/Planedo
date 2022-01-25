@@ -11,6 +11,6 @@ when@prod:
         router:
             strict_requirements: null
 
-plaendo:
-    # loads routes from the given routing file stored in some bundle
-    resource: '@PlanedoBundle/Resources/config/routes.yaml'
+#plaendo:
+#    # loads routes from the given routing file stored in some bundle
+#    resource: '@PlanedoBundle/Resources/config/routes.yaml'

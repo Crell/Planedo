@@ -8,7 +8,7 @@ parameters:
     app.feeds.purge-before: -10 days
 services:
     Laminas\Feed\Reader\Http\ClientInterface:
-        alias: App\FeedReaderClient
+        alias: Crell\Bundle\Planedo\FeedReaderClient
         public: true
 
     Psr\Clock\ClockInterface:
