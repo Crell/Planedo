@@ -11,6 +11,13 @@
         {
             "type": "git",
             "url": "https://github.com/Crell/PlanedoBundle.git"
+        },
+        {
+            "type": "path",
+            "url": "./lib/PlanedoBundle",
+            "options": {
+                "symlink": true
+            }
         }
     ],
     "authors": [
@@ -101,7 +108,9 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "App\\Tests\\": "tests/"
+            "App\\Tests\\": "tests/",
+            "Crell\\Bundle\\Planedo\\Tests\\": "lib/PlanedoBundle/tests",
+            "Crell\\Bundle\\Planedo\\": "lib/PlanedoBundle/src"
         }
     },
     "replace": {
