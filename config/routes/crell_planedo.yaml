@@ -1,0 +1,3 @@
+crell_planedo:
+  resource: '@CrellPlanedoBundle/config/routes.yaml'
+  prefix: ''
