@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8ccc577dcce2bb572708729c1917445f",
+    "content-hash": "f3df7224870d8a71bf2446be2ca0084d",
     "packages": [
         {
             "name": "composer/package-versions-deprecated",
@@ -82,19 +82,32 @@
         {
             "name": "crell/planedo-bundle",
             "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Crell/PlanedoBundle.git",
-                "reference": "0c64ba6ccc09327fde7b1a7bc0343227a05c6a92"
+            "dist": {
+                "type": "path",
+                "url": "./lib/PlanedoBundle",
+                "reference": "77ef961641d8df5c71765201b9cd28a812803c62"
             },
             "require": {
-                "php": "~8.1"
+                "doctrine/doctrine-bundle": "^2.4",
+                "easycorp/easyadmin-bundle": "^4.0",
+                "laminas/laminas-feed": "^2.15",
+                "navarr/wall-clock": "dev-main",
+                "nyholm/psr7": "^1.4",
+                "php": "~8.1",
+                "psr/clock": "@dev",
+                "psr/http-client": "^1.0",
+                "symfony/form": "6.0.*",
+                "symfony/http-client": "6.0.*",
+                "symfony/messenger": "6.0.*",
+                "symfony/twig-bundle": "6.0.*",
+                "twig/twig": "^2.12|^3.0"
             },
             "require-dev": {
+                "dama/doctrine-test-bundle": "^6.7",
+                "doctrine/doctrine-fixtures-bundle": "^3.4",
                 "phpstan/phpstan": "^1.0",
                 "phpunit/phpunit": "^9.5"
             },
-            "default-branch": true,
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
@@ -124,7 +137,10 @@
                 }
             ],
             "description": "Feed aggregator bundle for Symfony 6 and later.",
-            "time": "2022-01-24T23:03:16+00:00"
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
         },
         {
             "name": "doctrine/annotations",
@@ -9350,12 +9366,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "341bf2dc38dcbc17c9cc7bd1b44c3a40c84959e0"
+                "reference": "37d822767985a5f43637dc8836da9d9360fb1286"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/341bf2dc38dcbc17c9cc7bd1b44c3a40c84959e0",
-                "reference": "341bf2dc38dcbc17c9cc7bd1b44c3a40c84959e0",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/37d822767985a5f43637dc8836da9d9360fb1286",
+                "reference": "37d822767985a5f43637dc8836da9d9360fb1286",
                 "shasum": ""
             },
             "conflict": {
@@ -9626,7 +9642,7 @@
                 "simplito/elliptic-php": "<1.0.6",
                 "slim/slim": "<2.6",
                 "smarty/smarty": "<3.1.43|>=4,<4.0.3",
-                "snipe/snipe-it": "<5.3.7",
+                "snipe/snipe-it": "<=5.3.7",
                 "socalnick/scn-social-auth": "<1.15.2",
                 "socialiteproviders/steam": "<1.1",
                 "spipu/html2pdf": "<5.2.4",
@@ -9787,7 +9803,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-01-25T09:14:18+00:00"
+            "time": "2022-01-26T21:13:17+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -11342,11 +11358,10 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": {
         "crell/planedo-bundle": 20,
         "navarr/wall-clock": 20,
-        "psr/clock": 20,
         "symfony/doctrine-bridge": 20,
         "roave/security-advisories": 20
     },
