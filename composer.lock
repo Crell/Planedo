@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "691e9e24341b4726689cdfdfd8e044b5",
+    "content-hash": "8ccc577dcce2bb572708729c1917445f",
     "packages": [
         {
             "name": "composer/package-versions-deprecated",
@@ -3546,16 +3546,16 @@
         },
         {
             "name": "symfony/doctrine-bridge",
-            "version": "v6.0.2",
+            "version": "6.0.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/doctrine-bridge.git",
-                "reference": "edc5491594d2f69d5704118d255c6f597167813d"
+                "reference": "7767ee7bad27e01e17f06af9c857fcaa086e1080"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/doctrine-bridge/zipball/edc5491594d2f69d5704118d255c6f597167813d",
-                "reference": "edc5491594d2f69d5704118d255c6f597167813d",
+                "url": "https://api.github.com/repos/symfony/doctrine-bridge/zipball/7767ee7bad27e01e17f06af9c857fcaa086e1080",
+                "reference": "7767ee7bad27e01e17f06af9c857fcaa086e1080",
                 "shasum": ""
             },
             "require": {
@@ -3641,7 +3641,7 @@
             "description": "Provides integration for Doctrine with various Symfony components",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/doctrine-bridge/tree/v6.0.2"
+                "source": "https://github.com/symfony/doctrine-bridge/tree/6.0"
             },
             "funding": [
                 {
@@ -3657,7 +3657,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-12-25T20:10:03+00:00"
+            "time": "2022-01-26T17:23:29+00:00"
         },
         {
             "name": "symfony/dotenv",
@@ -8405,16 +8405,16 @@
     "packages-dev": [
         {
             "name": "dama/doctrine-test-bundle",
-            "version": "v6.7.3",
+            "version": "v6.7.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dmaicher/doctrine-test-bundle.git",
-                "reference": "1f964d416cf89698064dd0d69b5fe3170d05558d"
+                "reference": "b1626f0e63a75a335aac49f6932d33018a6c5e2a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dmaicher/doctrine-test-bundle/zipball/1f964d416cf89698064dd0d69b5fe3170d05558d",
-                "reference": "1f964d416cf89698064dd0d69b5fe3170d05558d",
+                "url": "https://api.github.com/repos/dmaicher/doctrine-test-bundle/zipball/b1626f0e63a75a335aac49f6932d33018a6c5e2a",
+                "reference": "b1626f0e63a75a335aac49f6932d33018a6c5e2a",
                 "shasum": ""
             },
             "require": {
@@ -8465,9 +8465,9 @@
             ],
             "support": {
                 "issues": "https://github.com/dmaicher/doctrine-test-bundle/issues",
-                "source": "https://github.com/dmaicher/doctrine-test-bundle/tree/v6.7.3"
+                "source": "https://github.com/dmaicher/doctrine-test-bundle/tree/v6.7.4"
             },
-            "time": "2022-01-18T15:55:40+00:00"
+            "time": "2022-01-26T19:40:56+00:00"
         },
         {
             "name": "doctrine/data-fixtures",
@@ -11347,6 +11347,7 @@
         "crell/planedo-bundle": 20,
         "navarr/wall-clock": 20,
         "psr/clock": 20,
+        "symfony/doctrine-bridge": 20,
         "roave/security-advisories": 20
     },
     "prefer-stable": true,
