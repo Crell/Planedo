@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f3df7224870d8a71bf2446be2ca0084d",
+    "content-hash": "1206a9fa14a60709f4bf2a6fef6b98b2",
     "packages": [
         {
             "name": "composer/package-versions-deprecated",
@@ -85,7 +85,7 @@
             "dist": {
                 "type": "path",
                 "url": "./lib/PlanedoBundle",
-                "reference": "77ef961641d8df5c71765201b9cd28a812803c62"
+                "reference": "ae00df4d521f7935b2bb99fa3bc094834d0414ee"
             },
             "require": {
                 "doctrine/doctrine-bundle": "^2.4",
@@ -3566,12 +3566,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/doctrine-bridge.git",
-                "reference": "7767ee7bad27e01e17f06af9c857fcaa086e1080"
+                "reference": "d1d9d54717d3125119e09c9c34b337364e47960e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/doctrine-bridge/zipball/7767ee7bad27e01e17f06af9c857fcaa086e1080",
-                "reference": "7767ee7bad27e01e17f06af9c857fcaa086e1080",
+                "url": "https://api.github.com/repos/symfony/doctrine-bridge/zipball/d1d9d54717d3125119e09c9c34b337364e47960e",
+                "reference": "d1d9d54717d3125119e09c9c34b337364e47960e",
                 "shasum": ""
             },
             "require": {
@@ -3673,7 +3673,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-01-26T17:23:29+00:00"
+            "time": "2022-01-27T10:11:24+00:00"
         },
         {
             "name": "symfony/dotenv",
@@ -4167,16 +4167,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v1.18.1",
+            "version": "v1.18.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "90ee9ddddaadee602dff23ae530310a59936bc8b"
+                "reference": "d40a6b176b70ea323af2b08507319d1c417520fd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/90ee9ddddaadee602dff23ae530310a59936bc8b",
-                "reference": "90ee9ddddaadee602dff23ae530310a59936bc8b",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/d40a6b176b70ea323af2b08507319d1c417520fd",
+                "reference": "d40a6b176b70ea323af2b08507319d1c417520fd",
                 "shasum": ""
             },
             "require": {
@@ -4212,7 +4212,7 @@
             "description": "Composer plugin for Symfony",
             "support": {
                 "issues": "https://github.com/symfony/flex/issues",
-                "source": "https://github.com/symfony/flex/tree/v1.18.1"
+                "source": "https://github.com/symfony/flex/tree/v1.18.3"
             },
             "funding": [
                 {
@@ -4228,7 +4228,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-01-19T17:52:31+00:00"
+            "time": "2022-01-27T10:24:58+00:00"
         },
         {
             "name": "symfony/form",
@@ -9366,17 +9366,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "37d822767985a5f43637dc8836da9d9360fb1286"
+                "reference": "0fa79d93df0bd463f94946b7fe751ac28c61c6f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/37d822767985a5f43637dc8836da9d9360fb1286",
-                "reference": "37d822767985a5f43637dc8836da9d9360fb1286",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/0fa79d93df0bd463f94946b7fe751ac28c61c6f6",
+                "reference": "0fa79d93df0bd463f94946b7fe751ac28c61c6f6",
                 "shasum": ""
             },
             "conflict": {
                 "3f/pygmentize": "<1.2",
-                "adodb/adodb-php": "<5.20.12",
+                "adodb/adodb-php": "<=5.20.20|>=5.21,<=5.21.3",
                 "akaunting/akaunting": "<2.1.13",
                 "alterphp/easyadmin-extension-bundle": ">=1.2,<1.2.11|>=1.3,<1.3.1",
                 "amazing/media2click": ">=1,<1.3.3",
@@ -9545,6 +9545,7 @@
                 "modx/revolution": "<2.8",
                 "monolog/monolog": ">=1.8,<1.12",
                 "moodle/moodle": "<3.7.9|>=3.8,<3.8.8|>=3.9,<3.9.5|>=3.10-beta,<3.10.2",
+                "mustache/mustache": ">=2,<2.14.1",
                 "namshi/jose": "<2.2",
                 "neoan3-apps/template": "<1.1.1",
                 "neos/flow": ">=1,<1.0.4|>=1.1,<1.1.1|>=2,<2.0.1|>=2.3,<2.3.16|>=3,<3.0.12|>=3.1,<3.1.10|>=3.2,<3.2.13|>=3.3,<3.3.13|>=4,<4.0.6",
@@ -9803,7 +9804,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-01-26T21:13:17+00:00"
+            "time": "2022-01-27T16:25:24+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -11361,7 +11362,6 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "crell/planedo-bundle": 20,
-        "navarr/wall-clock": 20,
         "symfony/doctrine-bridge": 20,
         "roave/security-advisories": 20
     },
