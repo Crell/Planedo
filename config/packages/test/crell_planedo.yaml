@@ -1,0 +1,3 @@
+crell_planedo:
+    items_per_page: 5
+    purge_before: -10 days
