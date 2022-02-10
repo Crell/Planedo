@@ -1,7 +1,0 @@
-crell_planedo_admin:
-  resource: '@CrellPlanedoBundle/config/routes_admin.yaml'
-  prefix: ''
-
-crell_planedo_public:
-  resource: '@CrellPlanedoBundle/config/routes_public.yaml'
-  prefix: ''

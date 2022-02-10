@@ -1,0 +1,7 @@
+planedo_admin:
+  resource: '@PlanedoBundle/config/routes_admin.yaml'
+  prefix: ''
+
+planedo_public:
+  resource: '@PlanedoBundle/config/routes_public.yaml'
+  prefix: ''
