@@ -3,19 +3,6 @@
     "license": "AGPL-3.0-or-later",
     "minimum-stability": "dev",
     "prefer-stable": true,
-    "repositories": [
-        {
-            "type": "git",
-            "url": "https://github.com/php-fig/clock.git"
-        },
-        {
-            "type": "path",
-            "url": "./lib/PlanedoBundle",
-            "options": {
-                "symlink": true
-            }
-        }
-    ],
     "authors": [
         {
             "name": "Larry Garfield",
@@ -29,7 +16,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "composer/package-versions-deprecated": "1.11.99.4",
-        "crell/planedo-bundle": "@dev",
+        "crell/planedo-bundle": "^1.0",
         "doctrine/annotations": "^1.0",
         "doctrine/doctrine-bundle": "^2.4",
         "doctrine/doctrine-migrations-bundle": "^3.2",
