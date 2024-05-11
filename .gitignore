@@ -24,3 +24,7 @@
 # Some debug files we don't need.
 public/phpinfo.php
 public/xdebug.php
+
+# IDE files
+.idea
+*.iml
